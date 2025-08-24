@@ -68,7 +68,7 @@ export function useMonadGamesId() {
         timestamp: Date.now(),
         
         // Network information
-        chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '41454'),
+        chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '10143'),
         chainName: process.env.NEXT_PUBLIC_CHAIN_NAME || 'Monad Testnet',
       };
 

@@ -6,9 +6,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http } from 'viem';
 import { createConfig } from '@privy-io/wagmi';
 
-// Monad Testnet configuration - sesuai dengan repo yang berhasil
+// Monad Testnet configuration - updated with correct values
 const monadTestnet = {
-  id: 41454,
+  id: 10143,
   name: 'Monad Testnet',
   nativeCurrency: {
     decimals: 18,
@@ -16,10 +16,10 @@ const monadTestnet = {
     symbol: 'MON',
   },
   rpcUrls: {
-    default: { http: ['https://testnet1.monad.xyz'] },
+    default: { http: ['https://testnet-rpc.monad.xyz'] },
   },
   blockExplorers: {
-    default: { name: 'Monad Explorer', url: 'https://explorer-testnet.monad.xyz' },
+    default: { name: 'Monad Explorer', url: 'https://testnet.monadexplorer.com' },
   },
   testnet: true,
 } as const;
@@ -34,9 +34,23 @@ const config = createConfig({
 const queryClient = new QueryClient();
 
 export default function Providers({ children }: { children: React.ReactNode }) {
+  const privyAppId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
+  
+  // If no Privy App ID is provided, render children without Privy
+  if (!privyAppId) {
+    console.warn('NEXT_PUBLIC_PRIVY_APP_ID is not set. Privy authentication will be disabled.');
+    return (
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider config={config}>
+          {children}
+        </WagmiProvider>
+      </QueryClientProvider>
+    );
+  }
+
   return (
     <PrivyProvider
-      appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID!}
+      appId={privyAppId}
       config={{
         appearance: {
           theme: 'dark',

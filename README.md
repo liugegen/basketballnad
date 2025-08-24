@@ -39,12 +39,21 @@ cd basketballnad
 npm install
 ```
 
-3. Run the development server
+3. Set up environment variables
+```bash
+cp .env.example .env.local
+```
+Edit `.env.local` and add your configuration:
+- `NEXT_PUBLIC_PRIVY_APP_ID`: Get from [Privy Dashboard](https://dashboard.privy.io/) (optional for development)
+- `WALLET_PRIVATE_KEY`: Your wallet private key for Monad Games integration
+- `API_SECRET`: Generate with `openssl rand -hex 32`
+
+4. Run the development server
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## 📁 Project Structure
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useMonadGamesId } from '@/hooks/useMonadGamesId';
 
 interface LeaderboardEntry {
@@ -16,7 +16,7 @@ export default function MonadLeaderboard() {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const fetchLeaderboard = async () => {
+  const fetchLeaderboard = useCallback(async () => {
     setLoading(true);
     try {
       const data = await getLeaderboard();
@@ -28,13 +28,13 @@ export default function MonadLeaderboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getLeaderboard]);
 
   useEffect(() => {
     if (isOpen) {
       fetchLeaderboard();
     }
-  }, [isOpen]);
+  }, [isOpen, fetchLeaderboard]);
 
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
