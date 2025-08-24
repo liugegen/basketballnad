@@ -1,0 +1,217 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom animations for BasketNad game */
+@keyframes gradient-x {
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes sway {
+  0%, 100% {
+    transform: rotate(-3deg) translateY(0px);
+  }
+  25% {
+    transform: rotate(1deg) translateY(-1px);
+  }
+  50% {
+    transform: rotate(3deg) translateY(0px);
+  }
+  75% {
+    transform: rotate(-1deg) translateY(-0.5px);
+  }
+}
+
+@keyframes sway-delayed {
+  0%, 100% {
+    transform: rotate(2deg) translateY(0px);
+  }
+  25% {
+    transform: rotate(-2deg) translateY(-0.5px);
+  }
+  50% {
+    transform: rotate(-3deg) translateY(0px);
+  }
+  75% {
+    transform: rotate(1deg) translateY(-1px);
+  }
+}
+
+@keyframes net-sway {
+  0%, 100% {
+    transform: rotate(var(--rotation)) translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: rotate(calc(var(--rotation) + 2deg)) translateY(-1px) translateX(1px);
+  }
+  66% {
+    transform: rotate(calc(var(--rotation) - 1deg)) translateY(0px) translateX(-0.5px);
+  }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes bounce-big {
+  0%, 100% {
+    transform: scale(1) translateY(0px);
+  }
+  50% {
+    transform: scale(1.1) translateY(-20px);
+  }
+}
+
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-once {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes particle {
+  0% {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50px) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Apply animations */
+.animate-gradient-x {
+  animation: gradient-x 3s ease infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-sway {
+  animation: sway 2s ease-in-out infinite;
+}
+
+.animate-sway-delayed {
+  animation: sway-delayed 2s ease-in-out infinite;
+}
+
+.animate-net-sway {
+  animation: net-sway 4s ease-in-out infinite;
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 1s ease-in-out infinite;
+}
+
+.animate-bounce-big {
+  animation: bounce-big 0.8s ease-in-out;
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-spin-once {
+  animation: spin-once 1s ease-in-out;
+}
+
+.animate-pulse-gentle {
+  animation: pulse-gentle 2s ease-in-out infinite;
+}
+
+.animate-particle {
+  animation: particle 1s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.5s ease-out;
+}
+
+/* Custom utilities */
+.border-3 {
+  border-width: 3px;
+}
+
+.shadow-3xl {
+  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+}

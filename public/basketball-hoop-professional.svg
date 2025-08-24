@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients for realistic 3D effects -->
+    <linearGradient id="backboardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f5f5f5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e0e0e0;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="rimGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff8c00;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff6b00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e55100;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="supportGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#666666;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#555555;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#444444;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Shadow filters -->
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+    
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feOffset dx="0" dy="2"/>
+      <feGaussianBlur stdDeviation="2" result="offset-blur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.2"/>
+      <feComposite in2="offset-blur" operator="in"/>
+    </filter>
+  </defs>
+  
+  <!-- Backboard - MAXIMUM SIZE -->
+  <rect x="75" y="30" width="350" height="160" rx="15" ry="15" 
+        fill="url(#backboardGradient)" 
+        stroke="#cc0000" 
+        stroke-width="6" 
+        filter="url(#dropShadow)"/>
+  
+  <!-- Backboard inner square -->
+  <rect x="120" y="65" width="260" height="110" rx="8" ry="8" 
+        fill="none" 
+        stroke="#cc0000" 
+        stroke-width="5" 
+        opacity="0.8"/>
+  
+  <!-- Target square behind hoop -->
+  <rect x="200" y="150" width="100" height="50" 
+        fill="none" 
+        stroke="#cc0000" 
+        stroke-width="5" 
+        opacity="0.6"/>
+  
+  <!-- Backboard mounting bolts -->
+  <circle cx="100" cy="50" r="4" fill="#666666"/>
+  <circle cx="400" cy="50" r="4" fill="#666666"/>
+  <circle cx="100" cy="170" r="4" fill="#666666"/>
+  <circle cx="400" cy="170" r="4" fill="#666666"/>
+  
+  <!-- Support structure -->
+  <rect x="245" y="190" width="20" height="50" 
+        fill="url(#supportGradient)" 
+        rx="10" ry="10" 
+        filter="url(#dropShadow)"/>
+  
+  <!-- Support arms -->
+  <ellipse cx="170" cy="220" rx="50" ry="8" 
+           fill="url(#supportGradient)" 
+           transform="rotate(-20 170 220)"/>
+  <ellipse cx="330" cy="220" rx="50" ry="8" 
+           fill="url(#supportGradient)" 
+           transform="rotate(20 330 220)"/>
+  
+  <!-- Basketball rim outer - MAXIMUM SIZE for ultra realistic proportion -->
+  <ellipse cx="250" cy="240" rx="120" ry="24" 
+           fill="url(#rimGradient)" 
+           stroke="#bf360c" 
+           stroke-width="6" 
+           filter="url(#dropShadow)"/>
+  
+  <!-- Basketball rim inner -->
+  <ellipse cx="250" cy="240" rx="105" ry="18" 
+           fill="#ff7043" 
+           stroke="#d84315" 
+           stroke-width="4"/>
+  
+  <!-- Rim inner opening -->
+  <ellipse cx="250" cy="240" rx="90" ry="14" 
+           fill="none" 
+           stroke="#ff8a65" 
+           stroke-width="3"/>
+  
+  <!-- Rim highlights -->
+  <ellipse cx="220" cy="235" rx="25" ry="6" 
+           fill="#ffcc80" 
+           opacity="0.7"/>
+  
+  <!-- Net attachment points - Maximum points for maximum rim -->
+  <g stroke="#ffffff" stroke-width="1.5" fill="#ffffff">
+    <circle cx="150" cy="248" r="1.5"/>
+    <circle cx="170" cy="252" r="1.5"/>
+    <circle cx="190" cy="255" r="1.5"/>
+    <circle cx="210" cy="257" r="1.5"/>
+    <circle cx="230" cy="258" r="1.5"/>
+    <circle cx="250" cy="258.5" r="1.5"/>
+    <circle cx="270" cy="258" r="1.5"/>
+    <circle cx="290" cy="257" r="1.5"/>
+    <circle cx="310" cy="255" r="1.5"/>
+    <circle cx="330" cy="252" r="1.5"/>
+    <circle cx="350" cy="248" r="1.5"/>
+  </g>
+  
+  <!-- Professional basketball net - MAXIMUM size and ultra detailed -->
+  <g stroke="#ffffff" stroke-width="2.5" fill="none" opacity="0.9">
+    <!-- Outer net strands -->
+    <path d="M150,248 Q140,280 130,320 Q120,360 135,395" stroke-linecap="round"/>
+    <path d="M170,252 Q160,284 150,324 Q140,364 155,399" stroke-linecap="round"/>
+    <path d="M190,255 Q180,287 170,327 Q160,367 175,402" stroke-linecap="round"/>
+    <path d="M210,257 Q200,289 190,329 Q180,369 195,404" stroke-linecap="round"/>
+    <path d="M230,258 Q220,290 210,330 Q200,370 215,405" stroke-linecap="round"/>
+    <path d="M250,258.5 Q250,290.5 250,330.5 Q250,370.5 250,405.5" stroke-linecap="round"/>
+    <path d="M270,258 Q280,290 290,330 Q300,370 285,405" stroke-linecap="round"/>
+    <path d="M290,257 Q300,289 310,329 Q320,369 305,404" stroke-linecap="round"/>
+    <path d="M310,255 Q320,287 330,327 Q340,367 325,402" stroke-linecap="round"/>
+    <path d="M330,252 Q340,284 350,324 Q360,364 345,399" stroke-linecap="round"/>
+    <path d="M350,248 Q360,280 370,320 Q380,360 365,395" stroke-linecap="round"/>
+    
+    <!-- Inner net strands -->
+    <path d="M170,252 Q190,285 220,325 Q250,365 250,400" stroke-linecap="round" opacity="0.7"/>
+    <path d="M190,255 Q210,288 240,328 Q270,368 280,403" stroke-linecap="round" opacity="0.7"/>
+    <path d="M310,255 Q290,288 260,328 Q230,368 220,403" stroke-linecap="round" opacity="0.7"/>
+    <path d="M330,252 Q310,285 280,325 Q250,365 250,400" stroke-linecap="round" opacity="0.7"/>
+    
+    <!-- Horizontal net connections -->
+    <path d="M150,280 Q170,282 190,284 Q250,285.5 310,284 Q330,282 350,280" opacity="0.5"/>
+    <path d="M140,320 Q160,322 180,324 Q250,325.5 320,324 Q340,322 360,320" opacity="0.5"/>
+    <path d="M130,360 Q150,362 170,364 Q250,365.5 330,364 Q350,362 370,360" opacity="0.5"/>
+  </g>
+  
+  <!-- Subtle glow effect around rim -->
+  <ellipse cx="250" cy="240" rx="140" ry="30" 
+           fill="none" 
+           stroke="#ff8c00" 
+           stroke-width="2" 
+           opacity="0.3"/>
+</svg>
