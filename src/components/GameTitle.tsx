@@ -1,8 +1,8 @@
+import Image from 'next/image';
+
 interface GameTitleProps {
   className?: string;
 }
-
-import Image from 'next/image';
 
 export default function GameTitle({ className = "" }: GameTitleProps) {
   return (
