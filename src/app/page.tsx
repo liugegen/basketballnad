@@ -13,13 +13,19 @@ import TrajectoryTrail from '@/components/TrajectoryTrail';
 import StartGameMenu from '@/components/StartGameMenu';
 import GameOverModal from '@/components/GameOverModal';
 import BackgroundEffects from '@/components/BackgroundEffects';
+import MonadGamesIntegration from '@/components/MonadGamesIntegration';
+import ScoreSubmissionNotification from '@/components/ScoreSubmissionNotification';
 
 // Hooks
 import { useGameLogic, BALL_SIZE, HOOP_POSITION, HOOP_SIZE } from '@/hooks/useGameLogic';
 import { useMouseHandlers } from '@/hooks/useMouseHandlers';
 import { useTouchHandlers } from '@/hooks/useTouchHandlers';
+import { useState } from 'react';
 
 export default function BasketNad() {
+  // Notification state
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationScore, setNotificationScore] = useState(0);
   // Game logic hook
   const {
     score,
@@ -80,9 +86,23 @@ export default function BasketNad() {
       <GameTitle />
 
       {/* HUD - Game Stats */}
-      {gameState === 'playing' && (
-        <GameHUD score={score} timeLeft={timeLeft} />
-      )}
+      <div className="flex justify-between items-start w-full max-w-6xl mb-8 relative z-10">
+        {gameState === 'playing' && (
+          <GameHUD score={score} timeLeft={timeLeft} />
+        )}
+        
+        {/* Monad Games Integration - Always visible */}
+        <div className="ml-4">
+          <MonadGamesIntegration 
+            score={score} 
+            gameState={gameState}
+            onScoreSubmitted={(submittedScore) => {
+              setNotificationScore(submittedScore);
+              setShowNotification(true);
+            }}
+          />
+        </div>
+      </div>
 
       {/* Main Game Court */}
       <BasketballCourt
@@ -142,6 +162,13 @@ export default function BasketNad() {
           onMainMenu={resetGame}
         />
       )}
+
+      {/* Score Submission Notification */}
+      <ScoreSubmissionNotification
+        show={showNotification}
+        score={notificationScore}
+        onClose={() => setShowNotification(false)}
+      />
     </div>
   );
 }

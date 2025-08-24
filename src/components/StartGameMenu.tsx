@@ -1,3 +1,5 @@
+import MonadGamesStatus from './MonadGamesStatus';
+
 interface StartGameMenuProps {
   onStartGame: () => void;
 }
@@ -5,6 +7,9 @@ interface StartGameMenuProps {
 export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
   return (
     <div className="mt-12 text-center max-w-4xl relative z-10">
+      {/* Monad Games ID Status */}
+      <MonadGamesStatus />
+      
       {/* Main Start Button */}
       <div className="relative mb-12">
         <button
