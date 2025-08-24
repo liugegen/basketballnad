@@ -2,14 +2,18 @@ interface GameTitleProps {
   className?: string;
 }
 
+import Image from 'next/image';
+
 export default function GameTitle({ className = "" }: GameTitleProps) {
   return (
     <div className={`text-center mb-8 relative z-10 ${className}`}>
       <div className="relative flex items-center justify-center mb-4">
-        <img 
+        <Image 
           src="/icon.png" 
           alt="BasketNad Logo" 
-          className="w-20 h-20 mr-4 drop-shadow-2xl animate-bounce"
+          width={80}
+          height={80}
+          className="mr-4 drop-shadow-2xl animate-bounce"
         />
         <div className="relative">
           <h1 className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 mb-3 drop-shadow-2xl animate-gradient-x">

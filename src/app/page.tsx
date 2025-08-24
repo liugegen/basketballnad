@@ -26,26 +26,12 @@ import { useMouseHandlers } from '@/hooks/useMouseHandlers';
 import { useTouchHandlers } from '@/hooks/useTouchHandlers';
 import { useState } from 'react';
 
-export default function BasketNad() {
-  const { ready, authenticated } = usePrivy();
-
-  // Show loading while Privy is initializing
-  if (!ready) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
-      </div>
-    );
-  }
-
-  // Show login screen if not authenticated
-  if (!authenticated) {
-    return <LoginScreen />;
-  }
-
+// Game Component - separated to avoid hooks rules issues
+function GameComponent() {
   // Notification state
   const [showNotification, setShowNotification] = useState(false);
   const [notificationScore, setNotificationScore] = useState(0);
+  
   // Game logic hook
   const {
     score,
@@ -196,4 +182,25 @@ export default function BasketNad() {
       />
     </div>
   );
+}
+
+export default function BasketNad() {
+  const { ready, authenticated } = usePrivy();
+
+  // Show loading while Privy is initializing
+  if (!ready) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      </div>
+    );
+  }
+
+  // Show login screen if not authenticated
+  if (!authenticated) {
+    return <LoginScreen />;
+  }
+
+  // Show game if authenticated
+  return <GameComponent />;
 }
