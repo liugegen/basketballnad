@@ -55,14 +55,14 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         appearance: {
           theme: 'dark',
           accentColor: '#ff6b00',
-          logo: '/basketball-hoop-professional.svg',
+          logo: '/icon.png',
         },
         embeddedWallets: {
           createOnLogin: 'users-without-wallets',
         },
         defaultChain: monadTestnet,
         supportedChains: [monadTestnet],
-        loginMethods: ['wallet', 'email', 'google'],
+        loginMethods: ['email'],
       }}
     >
       <QueryClientProvider client={queryClient}>

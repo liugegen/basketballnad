@@ -16,6 +16,19 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "BasketNad - Professional Basketball Game on Monad",
   description: "Experience the thrill of basketball with realistic physics and professional gameplay. Play on Monad blockchain with Privy integration.",
+  icons: {
+    icon: [
+      { url: '/icon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icon.png', sizes: '16x16', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/icon.png',
+  },
+  openGraph: {
+    title: "BasketNad - Professional Basketball Game",
+    description: "Experience the thrill of basketball with realistic physics and professional gameplay on Monad blockchain.",
+    images: ['/icon.png'],
+  },
 };
 
 export default function RootLayout({

@@ -1,5 +1,8 @@
 'use client';
 
+import { usePrivy } from '@privy-io/react-auth';
+import LoginScreen from '@/components/LoginScreen';
+
 // Components
 import GameTitle from '@/components/GameTitle';
 import GameHUD from '@/components/GameHUD';
@@ -15,6 +18,7 @@ import GameOverModal from '@/components/GameOverModal';
 import BackgroundEffects from '@/components/BackgroundEffects';
 import MonadGamesIntegration from '@/components/MonadGamesIntegration';
 import ScoreSubmissionNotification from '@/components/ScoreSubmissionNotification';
+import UserProfile from '@/components/UserProfile';
 
 // Hooks
 import { useGameLogic, BALL_SIZE, HOOP_POSITION, HOOP_SIZE } from '@/hooks/useGameLogic';
@@ -23,6 +27,22 @@ import { useTouchHandlers } from '@/hooks/useTouchHandlers';
 import { useState } from 'react';
 
 export default function BasketNad() {
+  const { ready, authenticated } = usePrivy();
+
+  // Show loading while Privy is initializing
+  if (!ready) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      </div>
+    );
+  }
+
+  // Show login screen if not authenticated
+  if (!authenticated) {
+    return <LoginScreen />;
+  }
+
   // Notification state
   const [showNotification, setShowNotification] = useState(false);
   const [notificationScore, setNotificationScore] = useState(0);
@@ -81,6 +101,11 @@ export default function BasketNad() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col items-center justify-center p-4 relative overflow-hidden">
       {/* Animated Background Elements */}
       <BackgroundEffects />
+
+      {/* User Profile - Top Right */}
+      <div className="absolute top-4 right-4 z-20">
+        <UserProfile />
+      </div>
 
       {/* Game Title */}
       <GameTitle />
