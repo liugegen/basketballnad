@@ -46,7 +46,7 @@ export async function GET() {
   try {
     const gameAddress = process.env.GAME_ADDRESS || "0x103Da691d9323c3Fd51f124FD4B3Dd13338788A1";
     const privateKey = process.env.WALLET_PRIVATE_KEY;
-    
+
     if (!privateKey) {
       return NextResponse.json(
         { success: false, error: 'WALLET_PRIVATE_KEY not configured' },

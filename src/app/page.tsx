@@ -2,6 +2,7 @@
 
 import AuthComponent from '@/components/AuthComponent';
 import ScoreDebugger from '@/components/ScoreDebugger';
+import MobileGameControls from '@/components/MobileGameControls';
 
 // Components
 import GameTitle from '@/components/GameTitle';
@@ -18,7 +19,6 @@ import GameOverModal from '@/components/GameOverModal';
 import BackgroundEffects from '@/components/BackgroundEffects';
 import MonadGamesIntegration from '@/components/MonadGamesIntegration';
 import ScoreSubmissionNotification from '@/components/ScoreSubmissionNotification';
-import UserProfile from '@/components/UserProfile';
 
 // Hooks
 import { useGameLogic, BALL_SIZE, HOOP_POSITION, HOOP_SIZE } from '@/hooks/useGameLogic';
@@ -84,26 +84,94 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
       {/* Animated Background Elements */}
       <BackgroundEffects />
 
-      {/* User Profile - Top Right */}
-      <div className="absolute top-4 right-4 z-20">
-        <UserProfile />
-      </div>
+      {/* Mobile Game Controls */}
+      <MobileGameControls
+        score={score}
+        timeLeft={timeLeft}
+        gameState={gameState}
+        onReset={resetGame}
+      />
 
-      {/* Game Title */}
-      <GameTitle />
+      {/* Desktop Layout */}
+      <div className="container mx-auto px-4 py-8">
+        {/* Game Title - Responsive */}
+        <div className="text-center mb-6 md:mb-8">
+          <GameTitle />
+        </div>
 
-      {/* HUD - Game Stats */}
-      <div className="flex justify-between items-start w-full max-w-6xl mb-8 relative z-10">
-        {gameState === 'playing' && (
-          <GameHUD score={score} timeLeft={timeLeft} />
-        )}
-        
-        {/* Monad Games Integration - Always visible */}
-        <div className="ml-4">
+        {/* Game Stats - Desktop Only */}
+        <div className="hidden md:flex justify-between items-start w-full max-w-6xl mx-auto mb-8 relative z-10">
+          {gameState === 'playing' && (
+            <GameHUD score={score} timeLeft={timeLeft} />
+          )}
+          
+          {/* Monad Games Integration */}
+          <div className="ml-4">
+            <MonadGamesIntegration 
+              score={score} 
+              gameState={gameState}
+              playerAddress={playerAddress}
+              onScoreSubmitted={(submittedScore) => {
+                setNotificationScore(submittedScore);
+                setShowNotification(true);
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Main Game Court - Responsive */}
+        <div className="flex justify-center mb-20 md:mb-8">
+          <BasketballCourt
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            gameAreaRef={gameAreaRef}
+          >
+            {/* Basketball Hoop */}
+            <BasketballHoop 
+              position={HOOP_POSITION} 
+              size={HOOP_SIZE}
+              useProfessionalImage={true}
+            />
+
+            {/* Ball Trajectory Trail */}
+            <TrajectoryTrail 
+              trajectory={trajectory} 
+              ballSize={BALL_SIZE} 
+            />
+
+            {/* Basketball */}
+            <Basketball
+              position={ballPosition}
+              size={BALL_SIZE}
+              isDragging={isDragging}
+              isThrowing={isThrowing}
+              ballRef={ballRef}
+            />
+
+            {/* Game Instructions */}
+            <GameInstructions 
+              isVisible={gameState === 'playing' && !isThrowing && !isDragging} 
+            />
+
+            {/* Aiming Guide */}
+            <AimingGuide isVisible={isDragging} />
+            
+            {/* Score Effect */}
+            <ScoreEffect isVisible={showScoreEffect} />
+          </BasketballCourt>
+        </div>
+
+        {/* Mobile Monad Games Integration */}
+        <div className="md:hidden mb-6">
           <MonadGamesIntegration 
             score={score} 
             gameState={gameState}
@@ -115,51 +183,6 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
           />
         </div>
       </div>
-
-      {/* Main Game Court */}
-      <BasketballCourt
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        gameAreaRef={gameAreaRef}
-      >
-        {/* Basketball Hoop */}
-        <BasketballHoop 
-          position={HOOP_POSITION} 
-          size={HOOP_SIZE}
-          useProfessionalImage={true} // Set to false to use CSS version
-        />
-
-        {/* Ball Trajectory Trail */}
-        <TrajectoryTrail 
-          trajectory={trajectory} 
-          ballSize={BALL_SIZE} 
-        />
-
-        {/* Basketball */}
-        <Basketball
-          position={ballPosition}
-          size={BALL_SIZE}
-          isDragging={isDragging}
-          isThrowing={isThrowing}
-          ballRef={ballRef}
-        />
-
-        {/* Game Instructions */}
-        <GameInstructions 
-          isVisible={gameState === 'playing' && !isThrowing && !isDragging} 
-        />
-
-        {/* Aiming Guide */}
-        <AimingGuide isVisible={isDragging} />
-        
-        {/* Score Effect */}
-        <ScoreEffect isVisible={showScoreEffect} />
-      </BasketballCourt>
 
       {/* Start Game Menu */}
       {gameState === 'menu' && (
@@ -182,8 +205,10 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
         onClose={() => setShowNotification(false)}
       />
 
-      {/* Debug Component */}
-      <ScoreDebugger playerAddress={playerAddress} />
+      {/* Debug Component - Hidden on mobile */}
+      <div className="hidden md:block">
+        <ScoreDebugger playerAddress={playerAddress} />
+      </div>
     </div>
   );
 }
@@ -192,17 +217,57 @@ export default function BasketNad() {
   const [playerAddress, setPlayerAddress] = useState<string>("");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col items-center justify-center gap-8">
-      {/* Auth Component at the top */}
-      <AuthComponent onAddressChange={setPlayerAddress} />
-      
-      {/* Game Component - only show if player has address */}
-      {playerAddress ? <GameComponent playerAddress={playerAddress} /> : (
-        <div className="text-white text-center">
-          <h2 className="text-2xl font-bold mb-4">Welcome to BasketNad!</h2>
-          <p className="text-gray-300">Please login with your Monad Games ID to start playing</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* Auth Component - Fixed at top */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
+        <div className="container mx-auto px-4 py-3">
+          <AuthComponent onAddressChange={setPlayerAddress} />
         </div>
-      )}
+      </div>
+      
+      {/* Main Content */}
+      <div className="pt-20">
+        {playerAddress ? (
+          <GameComponent playerAddress={playerAddress} />
+        ) : (
+          <div className="min-h-screen flex flex-col items-center justify-center px-4">
+            <div className="text-center max-w-md mx-auto">
+              <div className="mb-8">
+                <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-2xl">
+                  <span className="text-4xl">🏀</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                  BasketNad
+                </h1>
+                <p className="text-lg text-gray-300 mb-8">
+                  Mainkan game basket terbaik di Monad Network dan raih skor tertinggi!
+                </p>
+              </div>
+              
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+                <h2 className="text-2xl font-bold text-white mb-4">Selamat Datang!</h2>
+                <p className="text-gray-300 mb-6">
+                  Login dengan Monad Games ID untuk mulai bermain dan bersaing di leaderboard global.
+                </p>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-3 text-sm text-gray-400">
+                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                    Skor otomatis tersimpan di blockchain
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-gray-400">
+                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                    Leaderboard global real-time
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-gray-400">
+                    <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                    Gameplay yang smooth di semua device
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

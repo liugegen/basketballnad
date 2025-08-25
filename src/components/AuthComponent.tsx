@@ -74,57 +74,79 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
 
   if (!authenticated) {
     return (
-      <button
-        onClick={login}
-        className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
-      >
-        Login with Monad Games ID
-      </button>
+      <div className="flex justify-center">
+        <button
+          onClick={login}
+          className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3"
+        >
+          <span className="text-xl">🎮</span>
+          <span className="hidden sm:inline">Login with Monad Games ID</span>
+          <span className="sm:hidden">Login</span>
+        </button>
+      </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center gap-3 text-sm bg-black/20 backdrop-blur-sm rounded-xl p-4 border border-orange-500/30">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
       {accountAddress ? (
         <>
+          {/* User Info */}
           <div className="flex items-center gap-3">
-            {hasUsername && monadUser ? (
-              <span className="text-green-400 font-semibold">✅ Monad Games ID: {monadUser.username}</span>
-            ) : (
-              <a
-                href="https://monad-games-id-site.vercel.app"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-yellow-600 text-white px-3 py-1 rounded text-xs hover:bg-yellow-700 transition-colors"
-              >
-                Register Username
-              </a>
-            )}
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-sm">
+                {hasUsername && monadUser ? monadUser.username.charAt(0).toUpperCase() : '👤'}
+              </span>
+            </div>
+            
+            <div className="flex flex-col">
+              {hasUsername && monadUser ? (
+                <span className="text-white font-semibold text-sm">
+                  {monadUser.username}
+                </span>
+              ) : (
+                <a
+                  href="https://monad-games-id-site.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-yellow-400 hover:text-yellow-300 text-sm font-medium underline"
+                >
+                  Register Username
+                </a>
+              )}
+              <span className="text-gray-400 text-xs font-mono">
+                {formatAddress(accountAddress)}
+              </span>
+            </div>
+          </div>
 
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={copyToClipboard}
+              className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 px-3 py-2 rounded-lg text-xs transition-colors border border-blue-500/30"
+              title={accountAddress}
+            >
+              {copied ? '✓ Copied' : '📋 Copy'}
+            </button>
+            
             <button
               onClick={logout}
-              className="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 transition-colors"
+              className="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-2 rounded-lg text-xs transition-colors border border-red-500/30"
             >
               Logout
             </button>
           </div>
-
-          <div className="flex items-center gap-2 bg-gray-800/50 px-3 py-2 rounded-lg">
-            <span className="text-gray-300 text-xs">Address:</span>
-            <span className="text-white text-xs font-mono">{formatAddress(accountAddress)}</span>
-            <button
-              onClick={copyToClipboard}
-              className="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600 transition-colors"
-              title={accountAddress}
-            >
-              {copied ? '✓' : '📋'}
-            </button>
-          </div>
         </>
       ) : message ? (
-        <span className="text-red-400 text-xs">{message}</span>
+        <div className="text-center">
+          <span className="text-red-400 text-sm">{message}</span>
+        </div>
       ) : (
-        <span className="text-yellow-400 text-xs">Checking...</span>
+        <div className="flex items-center gap-2">
+          <div className="animate-spin w-4 h-4 border-2 border-yellow-400 border-t-transparent rounded-full"></div>
+          <span className="text-yellow-400 text-sm">Checking...</span>
+        </div>
       )}
     </div>
   );
