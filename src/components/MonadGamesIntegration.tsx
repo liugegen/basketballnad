@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useMonadGamesId } from '@/hooks/useMonadGamesId';
 import MonadSyncGuide from './MonadSyncGuide';
 import AddressMismatchGuide from './AddressMismatchGuide';
+import MonadGamesIdLogin from './MonadGamesIdLogin';
 import { MONAD_GAMES_ID_CONFIG } from '@/config/monad-games-id';
 
 export default function MonadGamesIntegration({
@@ -16,7 +17,7 @@ export default function MonadGamesIntegration({
   gameState: string;
   onScoreSubmitted?: (score: number) => void;
 }) {
-  const { login, logout } = usePrivy();
+  const { logout } = usePrivy();
   const {
     ready,
     authenticated,
@@ -69,17 +70,7 @@ export default function MonadGamesIntegration({
       </div>
 
       {!authenticated ? (
-        <div className="space-y-3">
-          <p className="text-sm text-gray-300">
-            Connect your wallet to save scores on Monad Games ID
-          </p>
-          <button
-            onClick={login}
-            className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
-          >
-            Connect Wallet
-          </button>
-        </div>
+        <MonadGamesIdLogin />
       ) : (
         <div className="space-y-3">
           <div className="flex items-center justify-between">

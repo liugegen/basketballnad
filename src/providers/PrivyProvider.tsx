@@ -35,7 +35,7 @@ const config = createConfig({
 const queryClient = new QueryClient();
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  // Use Monad Games ID App ID from config, fallback to env variable
+  // Use Monad Games ID App ID directly for full integration
   const privyAppId = process.env.NEXT_PUBLIC_PRIVY_APP_ID || MONAD_GAMES_ID_CONFIG.PRIVY_APP_ID;
   
   // If no Privy App ID is provided, render children without Privy
@@ -60,6 +60,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           logo: '/icon.png',
           showWalletLoginFirst: false,
           walletChainType: 'ethereum-only',
+          // Monad Games ID branding
+          walletList: ['metamask', 'coinbase_wallet', 'wallet_connect'],
+          loginMessage: 'Login dengan Monad Games ID',
         },
         embeddedWallets: {
           createOnLogin: 'users-without-wallets',
@@ -67,7 +70,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         },
         defaultChain: monadTestnet,
         supportedChains: [monadTestnet],
-        loginMethods: ['email'],
+        loginMethods: ['email', 'wallet'],
         // Monad Games ID specific configuration
         mfa: {
           noPromptOnMfaRequired: false,
@@ -77,7 +80,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           termsAndConditionsUrl: `${MONAD_GAMES_ID_CONFIG.SITE_URL}/terms`,
           privacyPolicyUrl: `${MONAD_GAMES_ID_CONFIG.SITE_URL}/privacy`,
         },
-
       }}
     >
       <QueryClientProvider client={queryClient}>
