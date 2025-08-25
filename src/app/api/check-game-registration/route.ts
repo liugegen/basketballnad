@@ -5,25 +5,35 @@ import { ethers } from 'ethers';
 const CONTRACT_ABI = [
   {
     "inputs": [
-      { "internalType": "address", "name": "gameAddress", "type": "address" }
+      { "internalType": "address", "name": "", "type": "address" }
     ],
     "name": "games",
     "outputs": [
-      { "internalType": "bool", "name": "isRegistered", "type": "bool" },
+      { "internalType": "address", "name": "game", "type": "address" },
+      { "internalType": "string", "name": "image", "type": "string" },
       { "internalType": "string", "name": "name", "type": "string" },
-      { "internalType": "address", "name": "owner", "type": "address" }
+      { "internalType": "string", "name": "url", "type": "string" }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "gameAddress", "type": "address" },
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
       { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "hasRole",
     "outputs": [
       { "internalType": "bool", "name": "", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "GAME_ROLE",
+    "outputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -59,11 +69,11 @@ export async function GET() {
       gameInfo = await contract.games(gameAddress);
     } catch (error) {
       console.error('Error checking game registration:', error);
-      gameInfo = [false, "Unknown", ethers.ZeroAddress];
+      gameInfo = [ethers.ZeroAddress, "", "Unknown", ""];
     }
 
-    // Check if wallet has GAME_ROLE (role hash for GAME_ROLE)
-    const GAME_ROLE = ethers.keccak256(ethers.toUtf8Bytes("GAME_ROLE"));
+    // Check if wallet has GAME_ROLE
+    const GAME_ROLE = await contract.GAME_ROLE();
     let hasGameRole = false;
     try {
       hasGameRole = await contract.hasRole(GAME_ROLE, walletAddress);
@@ -77,9 +87,11 @@ export async function GET() {
       contractAddress: CONTRACT_ADDRESS,
       walletAddress,
       gameRegistration: {
-        isRegistered: gameInfo[0],
-        name: gameInfo[1],
-        owner: gameInfo[2]
+        isRegistered: gameInfo[0] !== ethers.ZeroAddress,
+        name: gameInfo[2], // name is at index 2 in the new ABI
+        image: gameInfo[1], // image is at index 1
+        url: gameInfo[3], // url is at index 3
+        gameAddress: gameInfo[0]
       },
       permissions: {
         hasGameRole

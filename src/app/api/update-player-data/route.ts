@@ -1,18 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ethers } from 'ethers';
 
-// Contract ABI for Monad Games ID contract
+// Contract ABI for Monad Games ID contract - using the correct ABI
 const CONTRACT_ABI = [
   {
     "inputs": [
       { "internalType": "address", "name": "player", "type": "address" },
-      { "internalType": "address", "name": "gameAddress", "type": "address" },
       { "internalType": "uint256", "name": "scoreAmount", "type": "uint256" },
       { "internalType": "uint256", "name": "transactionAmount", "type": "uint256" }
     ],
     "name": "updatePlayerData",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "hasRole",
+    "outputs": [
+      { "internalType": "bool", "name": "", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "GAME_ROLE",
+    "outputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ];
@@ -54,7 +74,6 @@ export async function POST(request: NextRequest) {
       scoreAmount,
       transactionAmount,
       contractAddress: CONTRACT_ADDRESS,
-      gameAddress: process.env.GAME_ADDRESS,
       walletAddress: new ethers.Wallet(privateKey).address
     });
 
@@ -66,20 +85,35 @@ export async function POST(request: NextRequest) {
     // Create contract instance
     const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
 
-    // Get game address from environment
-    const gameAddress = process.env.GAME_ADDRESS || "0x103Da691d9323c3Fd51f124FD4B3Dd13338788A1";
+    // Check if wallet has GAME_ROLE permission
+    try {
+      const GAME_ROLE = await contract.GAME_ROLE();
+      const hasGameRole = await contract.hasRole(GAME_ROLE, wallet.address);
+      
+      if (!hasGameRole) {
+        console.error('❌ Wallet does not have GAME_ROLE permission');
+        return NextResponse.json(
+          { success: false, error: 'Insufficient permissions to update player data' },
+          { status: 403 }
+        );
+      }
+      
+      console.log('✅ Wallet has GAME_ROLE permission');
+    } catch (roleError) {
+      console.error('Error checking GAME_ROLE:', roleError);
+      // Continue anyway, let the contract call fail if no permission
+    }
 
     console.log('📝 Calling contract updatePlayerData with:', {
       player: playerAddress,
-      game: gameAddress,
       score: scoreAmount,
-      transactions: transactionAmount
+      transactions: transactionAmount,
+      walletAddress: wallet.address
     });
 
-    // Call updatePlayerData function with game address
+    // Call updatePlayerData function (only 3 parameters as per the correct ABI)
     const tx = await contract.updatePlayerData(
       playerAddress,
-      gameAddress,
       ethers.parseUnits(scoreAmount.toString(), 0), // Score as integer
       ethers.parseUnits(transactionAmount.toString(), 0) // Transaction count as integer
     );
