@@ -184,6 +184,11 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
         </div>
       </div>
 
+      {/* Debug: Show current game state */}
+      <div className="fixed top-4 left-4 bg-black/80 text-white p-2 rounded z-50 text-sm">
+        Game State: {gameState}
+      </div>
+
       {/* Start Game Menu */}
       {gameState === 'menu' && (
         <StartGameMenu onStartGame={startGame} />
@@ -240,27 +245,27 @@ export default function BasketNad() {
                   BasketNad
                 </h1>
                 <p className="text-lg text-gray-300 mb-8">
-                  Mainkan game basket terbaik di Monad Network dan raih skor tertinggi!
+                  Play the best basketball game on Monad Network and achieve the highest score!
                 </p>
               </div>
               
               <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-                <h2 className="text-2xl font-bold text-white mb-4">Selamat Datang!</h2>
+                <h2 className="text-2xl font-bold text-white mb-4">Welcome!</h2>
                 <p className="text-gray-300 mb-6">
-                  Login dengan Monad Games ID untuk mulai bermain dan bersaing di leaderboard global.
+                  Login with Monad Games ID to start playing and compete on the global leaderboard.
                 </p>
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-3 text-sm text-gray-400">
                     <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                    Skor otomatis tersimpan di blockchain
+                    Scores automatically saved on blockchain
                   </div>
                   <div className="flex items-center gap-3 text-sm text-gray-400">
                     <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                    Leaderboard global real-time
+                    Real-time global leaderboard
                   </div>
                   <div className="flex items-center gap-3 text-sm text-gray-400">
                     <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                    Gameplay yang smooth di semua device
+                    Smooth gameplay on all devices
                   </div>
                 </div>
               </div>

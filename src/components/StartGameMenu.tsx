@@ -22,7 +22,7 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
             <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-2xl md:rounded-3xl"></div>
             <div className="relative flex items-center justify-center space-x-2 md:space-x-4">
               <span className="text-2xl md:text-4xl animate-bounce">🏀</span>
-              <span className="tracking-wider text-lg md:text-3xl">MULAI MAIN</span>
+              <span className="tracking-wider text-lg md:text-3xl">START GAME</span>
               <span className="text-2xl md:text-4xl animate-bounce delay-300">🎯</span>
             </div>
 
@@ -42,7 +42,7 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
             <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl md:rounded-2xl flex items-center justify-center mr-2 md:mr-4 shadow-lg shadow-purple-500/30">
               <span className="text-lg md:text-2xl">🎮</span>
             </div>
-            <h3 className="text-xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-indigo-300">Cara Bermain</h3>
+            <h3 className="text-xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-indigo-300">How to Play</h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 text-white/90">
@@ -51,9 +51,9 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
                 <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
                   <span className="text-lg md:text-2xl">🏀</span>
                 </div>
-                <div className="text-sm md:text-lg font-bold text-purple-200">Tekan & Bidik</div>
+                <div className="text-sm md:text-lg font-bold text-purple-200">Press & Aim</div>
               </div>
-              <p className="text-xs md:text-sm text-purple-100/80">Tekan dan geser bola basket untuk membidik ring yang bercahaya</p>
+              <p className="text-xs md:text-sm text-purple-100/80">Press and drag the basketball to aim at the glowing hoop</p>
             </div>
 
             <div className="bg-gradient-to-br from-indigo-600/20 to-violet-600/20 rounded-xl md:rounded-2xl p-4 md:p-6 border border-indigo-400/30 transform hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/20">
@@ -61,9 +61,9 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
                 <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
                   <span className="text-lg md:text-2xl">🎯</span>
                 </div>
-                <div className="text-sm md:text-lg font-bold text-indigo-200">Lepas & Tembak</div>
+                <div className="text-sm md:text-lg font-bold text-indigo-200">Release & Shoot</div>
               </div>
-              <p className="text-xs md:text-sm text-indigo-100/80">Lepaskan untuk menembak bola dengan fisika yang realistis</p>
+              <p className="text-xs md:text-sm text-indigo-100/80">Release to shoot the ball with realistic physics</p>
             </div>
 
             <div className="bg-gradient-to-br from-violet-600/20 to-purple-600/20 rounded-xl md:rounded-2xl p-4 md:p-6 border border-violet-400/30 transform hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/20">
@@ -71,9 +71,9 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
                 <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
                   <span className="text-lg md:text-2xl">⏱️</span>
                 </div>
-                <div className="text-sm md:text-lg font-bold text-violet-200">Tantangan Waktu</div>
+                <div className="text-sm md:text-lg font-bold text-violet-200">Time Challenge</div>
               </div>
-              <p className="text-xs md:text-sm text-violet-100/80">Cetak skor sebanyak mungkin dalam 60 detik</p>
+              <p className="text-xs md:text-sm text-violet-100/80">Score as many points as possible in 60 seconds</p>
             </div>
 
             <div className="bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-xl md:rounded-2xl p-4 md:p-6 border border-purple-400/30 transform hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20">
@@ -81,9 +81,9 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
                 <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
                   <span className="text-lg md:text-2xl">🏆</span>
                 </div>
-                <div className="text-sm md:text-lg font-bold text-purple-200">Raih Poin</div>
+                <div className="text-sm md:text-lg font-bold text-purple-200">Score Points</div>
               </div>
-              <p className="text-xs md:text-sm text-purple-100/80">Setiap tembakan sukses memberikan 1 poin</p>
+              <p className="text-xs md:text-sm text-purple-100/80">Each successful shot gives you 1 point</p>
             </div>
           </div>
         </div>

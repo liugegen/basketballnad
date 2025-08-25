@@ -41,7 +41,7 @@ export default function MonadGamesIdLogin() {
         <span className="text-sm font-semibold text-orange-400">Monad Games ID</span>
       </div>
       <p className="text-sm text-gray-300">
-        Login dengan akun Monad Games ID Anda untuk sinkronisasi wallet dan score
+        Login with your Monad Games ID account to sync wallet and score
       </p>
       <button
         onClick={connectToMonadGamesId}
@@ -54,11 +54,11 @@ export default function MonadGamesIdLogin() {
             <span>Connecting...</span>
           </div>
         ) : (
-          'Login dengan Monad Games ID'
+          'Login with Monad Games ID'
         )}
       </button>
       <p className="text-xs text-gray-400 text-center">
-        Menggunakan email yang sama dengan akun Monad Games ID Anda
+        Use the same email as your Monad Games ID account
       </p>
     </div>
   );
