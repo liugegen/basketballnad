@@ -77,6 +77,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           termsAndConditionsUrl: `${MONAD_GAMES_ID_CONFIG.SITE_URL}/terms`,
           privacyPolicyUrl: `${MONAD_GAMES_ID_CONFIG.SITE_URL}/privacy`,
         },
+
       }}
     >
       <QueryClientProvider client={queryClient}>
