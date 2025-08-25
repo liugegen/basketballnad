@@ -67,7 +67,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         },
         defaultChain: monadTestnet,
         supportedChains: [monadTestnet],
-        loginMethods: ['email', 'wallet'],
+        loginMethods: ['email'],
         // Monad Games ID specific configuration
         mfa: {
           noPromptOnMfaRequired: false,
