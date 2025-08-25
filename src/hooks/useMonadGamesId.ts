@@ -1,30 +1,13 @@
 'use client';
 
 import { usePrivy, useWallets } from '@privy-io/react-auth';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
-export interface GameSubmission {
-  // Game identification
-  name: string;
-  description: string;
-  version: string;
-  category: string;
-  tags: string[];
-  
-  // Developer information
-  developer: {
-    name: string;
-    url: string;
-  };
-  
-  // Game session data
-  playerAddress: string;
-  score: number;
-  timestamp: number;
-  
-  // Network information
-  chainId: number;
-  chainName: string;
+interface ScoreSubmissionResponse {
+  success: boolean;
+  transactionHash?: string;
+  message?: string;
+  error?: string;
 }
 
 export function useMonadGamesId() {
@@ -33,8 +16,39 @@ export function useMonadGamesId() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastSubmittedScore, setLastSubmittedScore] = useState<number | null>(null);
 
-  const submitScore = useCallback(async (score: number): Promise<boolean> => {
-    if (!authenticated || !ready || isSubmitting || score <= 0) {
+  // Get session token for authenticated requests
+  const getSessionToken = useCallback(async (playerAddress: string): Promise<string | null> => {
+    try {
+      // In a real implementation, you would sign a message with the user's wallet here
+      const message = `Authenticate for score submission: ${playerAddress}`;
+      const signedMessage = "dummy_signature"; // This should be replaced with actual wallet signing
+      
+      const response = await fetch('/api/get-session-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          playerAddress,
+          message,
+          signedMessage,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        return data.sessionToken;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error getting session token:', error);
+      return null;
+    }
+  }, []);
+
+  const submitScore = useCallback(async (scoreAmount: number): Promise<boolean> => {
+    if (!authenticated || !ready || isSubmitting || scoreAmount <= 0) {
       return false;
     }
 
@@ -45,61 +59,44 @@ export function useMonadGamesId() {
     }
 
     setIsSubmitting(true);
-    console.log('🎮 Submitting score to Monad Games ID...', { score, walletAddress: wallet.address });
+    console.log('🎮 Submitting score to Monad Games ID...', { score: scoreAmount, walletAddress: wallet.address });
 
     try {
-      const gameResult = {
-        // Game identification
-        name: process.env.NEXT_PUBLIC_GAME_NAME || 'BasketNad',
-        description: process.env.NEXT_PUBLIC_GAME_DESCRIPTION || 'Professional Basketball Game on Monad',
-        version: process.env.NEXT_PUBLIC_GAME_VERSION || '1.0.0',
-        category: process.env.NEXT_PUBLIC_GAME_CATEGORY || 'Sports',
-        tags: process.env.NEXT_PUBLIC_GAME_TAGS?.split(',') || ['basketball', 'sports', 'arcade'],
-        
-        // Developer information
-        developer: {
-          name: process.env.NEXT_PUBLIC_DEVELOPER_NAME || 'BasketNad Team',
-          url: process.env.NEXT_PUBLIC_DEVELOPER_URL || 'https://basketnad.vercel.app',
-        },
-        
-        // Game session data
-        playerAddress: wallet.address,
-        score,
-        timestamp: Date.now(),
-        
-        // Network information
-        chainId: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '10143'),
-        chainName: process.env.NEXT_PUBLIC_CHAIN_NAME || 'Monad Testnet',
-      };
-
-      // Submit to Monad Games ID - following the pattern from successful repo
-      const monadGamesApiUrl = process.env.NEXT_PUBLIC_MONAD_GAMES_ID_API_URL;
-      if (!monadGamesApiUrl) {
-        console.error('NEXT_PUBLIC_MONAD_GAMES_ID_API_URL is not configured');
+      // Get session token
+      const sessionToken = await getSessionToken(wallet.address);
+      if (!sessionToken) {
+        console.error('Failed to get session token');
         return false;
       }
 
-      const response = await fetch(`${monadGamesApiUrl}/submit-game`, {
+      // Submit score using the same pattern as the successful example
+      const response = await fetch('/api/update-player-data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(gameResult),
+        body: JSON.stringify({
+          playerAddress: wallet.address,
+          scoreAmount,
+          transactionAmount: 1, // Each game counts as 1 transaction
+          sessionToken,
+        }),
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        setLastSubmittedScore(score);
+      const result: ScoreSubmissionResponse = await response.json();
+
+      if (result.success) {
+        setLastSubmittedScore(scoreAmount);
         console.log('✅ Score submitted successfully to Monad Games ID:', result);
+        
+        // Log Monad testnet explorer link if transaction hash is available
+        if (result.transactionHash) {
+          console.log(`Transaction confirmed: https://testnet.monadexplorer.com/tx/${result.transactionHash}`);
+        }
+        
         return true;
       } else {
-        const errorText = await response.text();
-        console.error('❌ Failed to submit score to Monad Games ID:', {
-          status: response.status,
-          statusText: response.statusText,
-          error: errorText,
-          gameData: gameResult
-        });
+        console.error('❌ Failed to submit score to Monad Games ID:', result.error);
         return false;
       }
     } catch (error) {
@@ -108,28 +105,36 @@ export function useMonadGamesId() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [authenticated, ready, wallets, isSubmitting]);
+  }, [authenticated, ready, wallets, isSubmitting, getSessionToken]);
 
-  const getLeaderboard = useCallback(async () => {
+  // Get player's total data
+  const getPlayerData = useCallback(async () => {
+    const wallet = wallets[0];
+    if (!wallet?.address) return null;
+
     try {
-      const monadGamesApiUrl = process.env.NEXT_PUBLIC_MONAD_GAMES_ID_API_URL;
-      if (!monadGamesApiUrl) {
-        console.error('NEXT_PUBLIC_MONAD_GAMES_ID_API_URL is not configured');
-        return null;
-      }
-
-      const gameName = process.env.NEXT_PUBLIC_GAME_NAME || 'BasketNad';
-      const response = await fetch(`${monadGamesApiUrl}/leaderboard?game=${encodeURIComponent(gameName)}`);
-      if (response.ok) {
-        return await response.json();
-      } else {
-        console.error('Failed to fetch leaderboard:', response.status, response.statusText);
-      }
+      const response = await fetch(`/api/get-player-data?address=${encodeURIComponent(wallet.address)}`);
+      const data = await response.json();
+      return data;
     } catch (error) {
-      console.error('Error fetching leaderboard:', error);
+      console.error('Error getting player data:', error);
+      return null;
     }
-    return null;
-  }, []);
+  }, [wallets]);
+
+  // Load last submitted score on mount
+  useEffect(() => {
+    if (authenticated && wallets[0]?.address) {
+      getPlayerData().then((data) => {
+        if (data?.success && data.score) {
+          // Convert from wei/string to number if needed
+          const score = typeof data.score === 'string' ? 
+            parseInt(data.score) : data.score;
+          setLastSubmittedScore(score);
+        }
+      });
+    }
+  }, [authenticated, wallets, getPlayerData]);
 
   return {
     ready,
@@ -139,6 +144,6 @@ export function useMonadGamesId() {
     isSubmitting,
     lastSubmittedScore,
     submitScore,
-    getLeaderboard,
+    getPlayerData,
   };
 }

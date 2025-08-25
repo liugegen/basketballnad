@@ -1,132 +1,142 @@
-# 🏀 BasketNad - Modern Basketball Game
+# BasketNad 🏀
 
-A modern, professional basketball shooting game built for the Mission 7 Monad Game Jam using Next.js, TypeScript, and Tailwind CSS.
+Professional Basketball Game on Monad Blockchain with full Monad Games ID integration.
 
-## ✨ Features
+## Features
 
-- **Modern UI/UX Design**: Professional gradient backgrounds, glass-morphism effects, and smooth animations
-- **Realistic Physics**: Parabolic ball trajectory with collision detection
-- **Interactive Gameplay**: Drag and drop basketball mechanics with touch support
-- **Time Challenge**: 60-second scoring challenge
-- **Visual Effects**: Score animations, trajectory trails, and particle effects
-- **Responsive Design**: Works on desktop and mobile devices
-- **Modular Architecture**: Clean, maintainable component structure
+- 🏀 **Realistic Basketball Physics** - Drag and shoot with authentic ball physics
+- ⛓️ **Monad Blockchain Integration** - Scores saved on Monad Games ID
+- 🎯 **Time Challenge Mode** - 60-second scoring challenges
+- 📱 **Mobile Responsive** - Play on desktop and mobile devices
+- 🔐 **Wallet Authentication** - Secure login with Privy
+- 🏆 **Score Tracking** - Automatic score submission to blockchain
 
-## 🎮 How to Play
+## Quick Start
 
-1. Click "START GAME" to begin
-2. Click and drag the basketball to aim
-3. Release to shoot at the glowing hoop
-4. Score as many baskets as possible in 60 seconds!
+### 1. Installation
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 18+ 
-- npm or yarn
-
-### Installation
-
-1. Clone the repository
 ```bash
-git clone <repository-url>
+git clone <your-repo-url>
 cd basketballnad
-```
-
-2. Install dependencies
-```bash
 npm install
 ```
 
-3. Set up environment variables
+### 2. Environment Setup
+
 ```bash
 cp .env.example .env.local
 ```
-Edit `.env.local` and add your configuration:
-- `NEXT_PUBLIC_PRIVY_APP_ID`: Get from [Privy Dashboard](https://dashboard.privy.io/) (optional for development)
-- `WALLET_PRIVATE_KEY`: Your wallet private key for Monad Games integration
-- `API_SECRET`: Generate with `openssl rand -hex 32`
 
-4. Run the development server
+Fill in your environment variables:
+```env
+WALLET_PRIVATE_KEY=0x...  # Wallet with GAME_ROLE
+API_SECRET=your_secret_here
+NEXT_PUBLIC_PRIVY_APP_ID=your_privy_app_id
+```
+
+### 3. Development
+
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+Open [http://localhost:3000](http://localhost:3000) to play!
 
-## 📁 Project Structure
+### 4. Production Build
+
+```bash
+npm run build
+npm run start
+```
+
+## Monad Integration
+
+### Network Details
+- **RPC**: https://testnet-rpc.monad.xyz
+- **Chain ID**: 10143
+- **Explorer**: https://testnet.monadexplorer.com
+
+### Contract Addresses
+- **Monad Games ID**: `0xceCBFF203C8B6044F52CE23D914A1bfD997541A4`
+- **BasketNad Game**: `0x103Da691d9323c3Fd51f124FD4B3Dd13338788A1`
+
+## How to Play
+
+1. **Connect Wallet** - Login with your Monad-compatible wallet
+2. **Start Game** - Click "START GAME" to begin 60-second challenge
+3. **Aim & Shoot** - Drag the basketball to aim, release to shoot
+4. **Score Points** - Each successful basket earns 1 point
+5. **Submit Score** - Scores automatically submit to Monad Games ID
+
+## Game Controls
+
+- **Desktop**: Click and drag with mouse
+- **Mobile**: Touch and drag with finger
+- **Aiming**: Drag ball to set power and direction
+- **Shooting**: Release to shoot the ball
+
+## Technical Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS
+- **Animation**: Framer Motion
+- **Blockchain**: Ethers.js, Privy Auth
+- **Network**: Monad Testnet
+
+## Project Structure
 
 ```
 src/
 ├── app/
-│   ├── globals.css          # Global styles and animations
-│   ├── layout.tsx           # Root layout
+│   ├── api/                 # API routes for blockchain interaction
+│   ├── globals.css          # Global styles
+│   ├── layout.tsx           # App layout
 │   └── page.tsx             # Main game page
-├── components/              # Reusable UI components
-│   ├── BackgroundEffects.tsx
-│   ├── Basketball.tsx
-│   ├── BasketballCourt.tsx
-│   ├── BasketballHoop.tsx
-│   ├── GameHUD.tsx
-│   ├── GameInstructions.tsx
-│   ├── GameOverModal.tsx
-│   ├── GameTitle.tsx
-│   ├── ScoreEffect.tsx
-│   ├── StartGameMenu.tsx
-│   └── TrajectoryTrail.tsx
-└── hooks/                   # Custom React hooks
-    ├── useGameLogic.ts      # Main game logic and state
-    ├── useMouseHandlers.ts  # Mouse interaction handlers
-    └── useTouchHandlers.ts  # Touch interaction handlers
+├── components/              # React components
+│   ├── Basketball.tsx       # Ball component
+│   ├── BasketballCourt.tsx  # Game court
+│   ├── BasketballHoop.tsx   # Hoop component
+│   ├── GameHUD.tsx          # Score/timer display
+│   ├── LoginScreen.tsx      # Authentication
+│   └── MonadGamesIntegration.tsx  # Blockchain integration
+├── hooks/                   # Custom React hooks
+│   ├── useGameLogic.ts      # Game state management
+│   ├── useMonadGamesId.ts   # Blockchain integration
+│   └── useMouseHandlers.ts  # Input handling
+└── providers/               # Context providers
+    └── PrivyProvider.tsx    # Authentication provider
 ```
 
-## 🎨 Design Features
+## Deployment
 
-### Visual Elements
-- **Gradient Backgrounds**: Multi-layered animated gradients
-- **Glass Morphism**: Backdrop blur effects with transparency
-- **3D Basketball**: Realistic basketball with texture and lighting
-- **Professional Hoop**: Detailed backboard, rim, and animated net
-- **Particle Effects**: Score celebration animations
+See [deploy.md](./deploy.md) for detailed deployment instructions.
 
-### Animations
-- **Custom CSS Animations**: Smooth transitions and effects
-- **Bounce Effects**: Realistic ball physics
-- **Floating Elements**: Ambient background animations
-- **Gradient Animations**: Dynamic color transitions
+### Quick Deploy to Vercel
 
-## 🛠️ Technical Stack
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/basketballnad)
 
-- **Framework**: Next.js 15.5.0
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4
-- **State Management**: React Hooks
-- **Animation**: Custom CSS animations
-- **Build Tool**: Webpack (via Next.js)
+## Development
 
-## 🎯 Game Mechanics
+### Prerequisites
 
-### Physics System
-- Parabolic trajectory calculation
-- Realistic ball arc based on distance
-- Collision detection with forgiving hit box
-- Smooth 60fps animations using requestAnimationFrame
+- Node.js 18+
+- npm or yarn
+- Monad-compatible wallet
+- MON tokens for gas fees
 
-### Scoring System
-- 1 point per successful basket
-- Visual feedback with "SWISH!" effect
-- Performance-based end game messages
-- Score tracking and display
+### Environment Variables
 
-### Controls
-- **Desktop**: Click and drag with mouse
-- **Mobile**: Touch and drag gestures
-- **Responsive**: Adapts to different screen sizes
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `WALLET_PRIVATE_KEY` | Wallet with GAME_ROLE on contract | Yes |
+| `API_SECRET` | Secret for session tokens | Yes |
+| `NEXT_PUBLIC_PRIVY_APP_ID` | Privy authentication app ID | Yes |
+| `CONTRACT_ADDRESS` | Monad Games ID contract address | No* |
+| `GAME_ADDRESS` | Your registered game address | No* |
 
-## 🔧 Development
+*Default values provided for Monad testnet
 
-### Available Scripts
+### Scripts
 
 ```bash
 npm run dev      # Start development server
@@ -135,57 +145,32 @@ npm run start    # Start production server
 npm run lint     # Run ESLint
 ```
 
-### Custom Animations
-
-The game includes custom CSS animations defined in `globals.css`:
-- `animate-gradient-x`: Gradient color transitions
-- `animate-float`: Floating elements
-- `animate-sway`: Net swaying animation
-- `animate-bounce-*`: Various bounce effects
-- `animate-pulse-gentle`: Subtle pulsing effects
-
-## 🎨 Customization
-
-### Colors
-The game uses a modern color palette:
-- **Primary**: Orange/Red gradients for basketball elements
-- **Secondary**: Blue/Purple for backgrounds
-- **Accent**: Yellow for highlights and effects
-
-### Animations
-All animations can be customized in `globals.css`. The game uses:
-- CSS custom properties for consistent timing
-- Tailwind CSS classes for responsive design
-- Custom keyframe animations for unique effects
-
-## 📱 Mobile Support
-
-- Touch-friendly controls
-- Responsive design for all screen sizes
-- Optimized performance for mobile devices
-- Gesture-based gameplay
-
-## 🏆 Performance
-
-- Optimized bundle size (~107KB first load)
-- 60fps smooth animations
-- Efficient collision detection
-- Minimal re-renders with React hooks
-
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## 📄 License
+## License
 
-This project is created for the Mission 7 Monad Game Jam.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🎉 Acknowledgments
+## Support
 
-- Mission 7 Monad Game Jam organizers
+- � **Bug Reports**: Open an issue on GitHub
+- 💡 **Feature Requests**: Open an issue with enhancement label
+- 📧 **Contact**: [your-email@example.com]
+- 🌐 **Website**: [https://basketnad.vercel.app]
+
+## Acknowledgments
+
+- Monad Games ID team for blockchain integration
+- Privy for authentication infrastructure
 - Next.js team for the amazing framework
-- Tailwind CSS for the utility-first styling approach
+- Basketball physics inspired by real-world mechanics
+
+---
+
+Made with ❤️ for the Monad ecosystem

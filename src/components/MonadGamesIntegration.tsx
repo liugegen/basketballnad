@@ -3,7 +3,6 @@
 import { usePrivy } from '@privy-io/react-auth';
 import { useEffect, useState } from 'react';
 import { useMonadGamesId } from '@/hooks/useMonadGamesId';
-import MonadLeaderboard from './MonadLeaderboard';
 
 export default function MonadGamesIntegration({
   score,
@@ -94,7 +93,7 @@ export default function MonadGamesIntegration({
 
           {lastSubmittedScore && lastSubmittedScore > 0 && (
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-300">Best Submitted:</span>
+              <span className="text-sm text-gray-300">Best Score:</span>
               <span className="text-sm text-green-400 font-bold">{lastSubmittedScore}</span>
             </div>
           )}
@@ -115,18 +114,15 @@ export default function MonadGamesIntegration({
         </div>
       )}
 
-      <div className="mt-3 pt-3 border-t border-gray-600 space-y-2">
-        <MonadLeaderboard />
-        {process.env.NEXT_PUBLIC_MONAD_GAMES_ID_API_URL && (
-          <a
-            href={process.env.NEXT_PUBLIC_MONAD_GAMES_ID_API_URL.replace('/api', '')}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block text-xs text-orange-400 hover:text-orange-300 transition-colors text-center"
-          >
-            View on Monad Games ID →
-          </a>
-        )}
+      <div className="mt-3 pt-3 border-t border-gray-600">
+        <a
+          href="https://monad-games-id-site.vercel.app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block text-xs text-orange-400 hover:text-orange-300 transition-colors text-center"
+        >
+          View on Monad Games ID →
+        </a>
       </div>
     </div>
   );

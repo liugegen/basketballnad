@@ -1,0 +1,23 @@
+{
+  "network": {
+    "name": "Monad Testnet",
+    "chainId": 10143,
+    "rpcUrl": "https://testnet-rpc.monad.xyz",
+    "explorer": "https://testnet.monadexplorer.com"
+  },
+  "contracts": {
+    "monadGamesId": "0xceCBFF203C8B6044F52CE23D914A1bfD997541A4",
+    "basketNadGame": "0x103Da691d9323c3Fd51f124FD4B3Dd13338788A1"
+  },
+  "game": {
+    "name": "BasketNad",
+    "description": "Professional Basketball Game on Monad",
+    "version": "1.0.0",
+    "category": "Sports",
+    "tags": ["basketball", "sports", "arcade"],
+    "developer": {
+      "name": "BasketNad Team",
+      "url": "https://basketnad.vercel.app"
+    }
+  }
+}
