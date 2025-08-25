@@ -130,7 +130,7 @@ export function useMonadGamesId() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [authenticated, ready, wallets, isSubmitting, getSessionToken]);
+  }, [authenticated, ready, wallets, isSubmitting, isAddressVerified, getSessionToken]);
 
   // Get player's total data
   const getPlayerData = useCallback(async () => {
@@ -172,8 +172,11 @@ export function useMonadGamesId() {
         console.log('✅ Address verified with Monad Games ID');
       } else {
         setIsAddressVerified(false);
-        setVerificationError(data.error || 'Address not verified with Monad Games ID');
-        console.error('❌ Address verification failed:', data.error);
+        const errorMsg = data.verified === false ? 
+          `Address mismatch: Game (${data.gameAddress?.slice(0,6)}...${data.gameAddress?.slice(-4)}) vs Monad ID (${data.monadAddress?.slice(0,6)}...${data.monadAddress?.slice(-4)})` :
+          (data.error || 'Address not verified with Monad Games ID');
+        setVerificationError(errorMsg);
+        console.error('❌ Address verification failed:', data);
       }
     } catch (error) {
       console.error('Error verifying address:', error);

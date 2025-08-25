@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { MONAD_GAMES_ID_CONFIG, isAddressMatch } from '@/config/monad-games-id';
 
 export async function POST(request: NextRequest) {
     try {
@@ -25,16 +26,23 @@ export async function POST(request: NextRequest) {
         //   body: JSON.stringify({ email, walletAddress })
         // });
 
-        // For development, we'll assume the verification passes
+        // For development, we'll simulate the Monad Games ID response
         // In production, you need to implement the actual Monad Games ID API integration
 
         console.log(`Verifying address ${walletAddress} for email ${email} with Monad Games ID`);
 
+        // Simulate Monad Games ID returning the correct address for the user
+        // This should be replaced with actual API call to Monad Games ID
+        const monadGameIdAddress = MONAD_GAMES_ID_CONFIG.TEST_ADDRESSES.MONAD_GAMES_ID_USER;
+        
+        const isVerified = isAddressMatch(walletAddress, monadGameIdAddress);
+        
         return NextResponse.json({
             success: true,
-            verified: true,
-            message: 'Address verified with Monad Games ID',
-            monadAddress: walletAddress // This should come from Monad Games ID API
+            verified: isVerified,
+            message: isVerified ? 'Address verified with Monad Games ID' : 'Address does not match Monad Games ID account',
+            monadAddress: monadGameIdAddress,
+            gameAddress: walletAddress
         });
 
     } catch (error) {

@@ -75,7 +75,9 @@ npm run start
 Your wallet address must match between the game and Monad Games ID. If addresses don't match:
 - Scores won't be saved properly
 - You'll see "Address not verified" status
-- Follow the [Address Sync Guide](./SETUP_ADDRESS_SYNC.md) to fix this
+- Follow the [Monad Games ID Setup Guide](./SETUP_MONAD_GAMES_ID.md) to fix this
+
+**Quick Fix**: Use Privy App ID `cmd8euall0037le0my79qpz42` in your `.env.local` file.
 
 ## Game Controls
 

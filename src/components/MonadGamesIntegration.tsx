@@ -4,6 +4,8 @@ import { usePrivy } from '@privy-io/react-auth';
 import { useEffect, useState } from 'react';
 import { useMonadGamesId } from '@/hooks/useMonadGamesId';
 import MonadSyncGuide from './MonadSyncGuide';
+import AddressMismatchGuide from './AddressMismatchGuide';
+import { MONAD_GAMES_ID_CONFIG } from '@/config/monad-games-id';
 
 export default function MonadGamesIntegration({
   score,
@@ -109,15 +111,31 @@ export default function MonadGamesIntegration({
           </div>
 
           {/* Show verification error if any */}
-          {verificationError && (
-            <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-2">
-              <p className="text-xs text-red-400">{verificationError}</p>
-              <button
-                onClick={verifyAddressWithMonad}
-                className="mt-1 text-xs text-red-300 hover:text-red-200 underline"
-              >
-                Retry Verification
-              </button>
+          {verificationError && !isAddressVerified && (
+            <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
+              <div className="flex items-center space-x-2 mb-2">
+                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                <span className="text-xs font-semibold text-red-400">Address Tidak Sinkron</span>
+              </div>
+              <p className="text-xs text-red-300 mb-2">
+                Wallet address Anda berbeda dengan yang terdaftar di Monad Games ID
+              </p>
+              <div className="text-xs text-gray-300 space-y-1 mb-2">
+                <div>Game: {walletAddress?.slice(0, 10)}...{walletAddress?.slice(-6)}</div>
+                <div>Monad ID: {MONAD_GAMES_ID_CONFIG.TEST_ADDRESSES.MONAD_GAMES_ID_USER.slice(0, 10)}...{MONAD_GAMES_ID_CONFIG.TEST_ADDRESSES.MONAD_GAMES_ID_USER.slice(-6)}</div>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={verifyAddressWithMonad}
+                  className="text-xs text-red-300 hover:text-red-200 underline"
+                >
+                  Coba Lagi
+                </button>
+              </div>
+              <AddressMismatchGuide 
+                gameAddress={walletAddress || ''} 
+                monadAddress={MONAD_GAMES_ID_CONFIG.TEST_ADDRESSES.MONAD_GAMES_ID_USER} 
+              />
             </div>
           )}
 
