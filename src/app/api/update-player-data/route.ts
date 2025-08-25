@@ -49,6 +49,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log('🔧 Debug Info:', {
+      playerAddress,
+      scoreAmount,
+      transactionAmount,
+      contractAddress: CONTRACT_ADDRESS,
+      gameAddress: process.env.GAME_ADDRESS,
+      walletAddress: new ethers.Wallet(privateKey).address
+    });
+
     // Setup provider and wallet for Monad Testnet
     const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || 'https://testnet-rpc.monad.xyz';
     const provider = new ethers.JsonRpcProvider(rpcUrl);
@@ -60,6 +69,13 @@ export async function POST(request: NextRequest) {
     // Get game address from environment
     const gameAddress = process.env.GAME_ADDRESS || "0x103Da691d9323c3Fd51f124FD4B3Dd13338788A1";
 
+    console.log('📝 Calling contract updatePlayerData with:', {
+      player: playerAddress,
+      game: gameAddress,
+      score: scoreAmount,
+      transactions: transactionAmount
+    });
+
     // Call updatePlayerData function with game address
     const tx = await contract.updatePlayerData(
       playerAddress,
@@ -68,8 +84,16 @@ export async function POST(request: NextRequest) {
       ethers.parseUnits(transactionAmount.toString(), 0) // Transaction count as integer
     );
 
+    console.log('⏳ Transaction sent:', tx.hash);
+
     // Wait for transaction confirmation
     const receipt = await tx.wait();
+    
+    console.log('✅ Transaction confirmed:', {
+      hash: receipt.hash,
+      blockNumber: receipt.blockNumber,
+      gasUsed: receipt.gasUsed.toString()
+    });
 
     return NextResponse.json({
       success: true,

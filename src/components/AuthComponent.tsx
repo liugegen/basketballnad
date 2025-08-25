@@ -4,7 +4,7 @@ import {
   usePrivy,
   CrossAppAccountWithMetadata,
 } from "@privy-io/react-auth";
-import { useMonadGamesUser } from "../hooks/useMonadGamesUser";
+import { useMonadGamesUser } from "@/hooks/useMonadGamesUser";
 
 // Separate component for when Privy is not configured
 function AuthNotConfigured() {
@@ -21,12 +21,10 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
   const [accountAddress, setAccountAddress] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [copied, setCopied] = useState<boolean>(false);
-  
-  const { 
-    user: monadUser, 
-    hasUsername, 
-    isLoading: isLoadingUser, 
-    error: userError 
+
+  const {
+    user: monadUser,
+    hasUsername
   } = useMonadGamesUser(accountAddress);
 
   useEffect(() => {
@@ -76,7 +74,7 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
 
   if (!authenticated) {
     return (
-      <button 
+      <button
         onClick={login}
         className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
       >
@@ -93,7 +91,7 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
             {hasUsername && monadUser ? (
               <span className="text-green-400 font-semibold">✅ Monad Games ID: {monadUser.username}</span>
             ) : (
-              <a 
+              <a
                 href="https://monad-games-id-site.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -102,15 +100,15 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
                 Register Username
               </a>
             )}
-            
-            <button 
+
+            <button
               onClick={logout}
               className="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 transition-colors"
             >
               Logout
             </button>
           </div>
-          
+
           <div className="flex items-center gap-2 bg-gray-800/50 px-3 py-2 rounded-lg">
             <span className="text-gray-300 text-xs">Address:</span>
             <span className="text-white text-xs font-mono">{formatAddress(accountAddress)}</span>
@@ -135,10 +133,10 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
 // Main component that conditionally renders based on Privy configuration
 export default function AuthComponent({ onAddressChange }: { onAddressChange: (address: string) => void }) {
   const privyAppId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
-  
+
   if (!privyAppId) {
     return <AuthNotConfigured />;
   }
-  
+
   return <PrivyAuth onAddressChange={onAddressChange} />;
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import AuthComponent from '@/components/AuthComponent';
+import ScoreDebugger from '@/components/ScoreDebugger';
 
 // Components
 import GameTitle from '@/components/GameTitle';
@@ -180,6 +181,9 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
         score={notificationScore}
         onClose={() => setShowNotification(false)}
       />
+
+      {/* Debug Component */}
+      <ScoreDebugger playerAddress={playerAddress} />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { usePrivy } from '@privy-io/react-auth';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function MonadGamesIdLogin() {
   const { login, authenticated, user } = usePrivy();
@@ -36,7 +37,7 @@ export default function MonadGamesIdLogin() {
   return (
     <div className="space-y-3">
       <div className="flex items-center space-x-2 mb-2">
-        <img src="/icon.png" alt="Monad Games ID" className="w-5 h-5" />
+        <Image src="/icon.png" alt="Monad Games ID" width={20} height={20} />
         <span className="text-sm font-semibold text-orange-400">Monad Games ID</span>
       </div>
       <p className="text-sm text-gray-300">

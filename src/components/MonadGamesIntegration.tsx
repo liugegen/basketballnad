@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useMonadGamesUser } from '@/hooks/useMonadGamesUser';
 
 export default function MonadGamesIntegration({
@@ -20,23 +20,10 @@ export default function MonadGamesIntegration({
   
   const { 
     user: monadUser, 
-    hasUsername, 
-    isLoading: isLoadingUser 
+    hasUsername
   } = useMonadGamesUser(playerAddress);
 
-  // Auto-submit score when game ends
-  useEffect(() => {
-    if (gameState === 'gameOver' && score > 0 && playerAddress && !hasSubmittedThisGame && !isSubmitting) {
-      submitScore(score);
-    }
-
-    // Reset submission flag when new game starts
-    if (gameState === 'playing') {
-      setHasSubmittedThisGame(false);
-    }
-  }, [gameState, score, playerAddress, hasSubmittedThisGame, isSubmitting]);
-
-  const submitScore = async (scoreAmount: number) => {
+  const submitScore = useCallback(async (scoreAmount: number) => {
     if (!playerAddress || scoreAmount <= 0) return;
 
     setIsSubmitting(true);
@@ -91,7 +78,19 @@ export default function MonadGamesIntegration({
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [playerAddress, onScoreSubmitted]);
+
+  // Auto-submit score when game ends
+  useEffect(() => {
+    if (gameState === 'gameOver' && score > 0 && playerAddress && !hasSubmittedThisGame && !isSubmitting) {
+      submitScore(score);
+    }
+
+    // Reset submission flag when new game starts
+    if (gameState === 'playing') {
+      setHasSubmittedThisGame(false);
+    }
+  }, [gameState, score, playerAddress, hasSubmittedThisGame, isSubmitting, submitScore]);
 
   if (!playerAddress) {
     return null;
