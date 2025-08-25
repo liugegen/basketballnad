@@ -3,6 +3,7 @@
 import { usePrivy } from '@privy-io/react-auth';
 import { useEffect, useState } from 'react';
 import { useMonadGamesId } from '@/hooks/useMonadGamesId';
+import MonadSyncGuide from './MonadSyncGuide';
 
 export default function MonadGamesIntegration({
   score,
@@ -20,7 +21,10 @@ export default function MonadGamesIntegration({
     walletAddress,
     isSubmitting,
     lastSubmittedScore,
-    submitScore
+    isAddressVerified,
+    verificationError,
+    submitScore,
+    verifyAddressWithMonad
   } = useMonadGamesId();
 
   const [hasSubmittedThisGame, setHasSubmittedThisGame] = useState(false);
@@ -86,6 +90,37 @@ export default function MonadGamesIntegration({
             </span>
           </div>
 
+          {/* Address Verification Status */}
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-gray-300">Monad ID:</span>
+            <div className="flex items-center space-x-2">
+              {isAddressVerified ? (
+                <>
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-xs text-green-400">Verified</span>
+                </>
+              ) : (
+                <>
+                  <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                  <span className="text-xs text-yellow-400">Checking...</span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Show verification error if any */}
+          {verificationError && (
+            <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-2">
+              <p className="text-xs text-red-400">{verificationError}</p>
+              <button
+                onClick={verifyAddressWithMonad}
+                className="mt-1 text-xs text-red-300 hover:text-red-200 underline"
+              >
+                Retry Verification
+              </button>
+            </div>
+          )}
+
           <div className="flex items-center justify-between">
             <span className="text-sm text-gray-300">Current Score:</span>
             <span className="text-lg font-bold text-white">{score}</span>
@@ -114,7 +149,7 @@ export default function MonadGamesIntegration({
         </div>
       )}
 
-      <div className="mt-3 pt-3 border-t border-gray-600">
+      <div className="mt-3 pt-3 border-t border-gray-600 space-y-2">
         <a
           href="https://monad-games-id-site.vercel.app"
           target="_blank"
@@ -123,6 +158,10 @@ export default function MonadGamesIntegration({
         >
           View on Monad Games ID →
         </a>
+        
+        <div className="text-center">
+          <MonadSyncGuide />
+        </div>
       </div>
     </div>
   );

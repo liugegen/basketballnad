@@ -6,6 +6,7 @@ Professional Basketball Game on Monad Blockchain with full Monad Games ID integr
 
 - 🏀 **Realistic Basketball Physics** - Drag and shoot with authentic ball physics
 - ⛓️ **Monad Blockchain Integration** - Scores saved on Monad Games ID
+- 🔄 **Address Synchronization** - Ensures wallet matches Monad Games ID account
 - 🎯 **Time Challenge Mode** - 60-second scoring challenges
 - 📱 **Mobile Responsive** - Play on desktop and mobile devices
 - 🔐 **Wallet Authentication** - Secure login with Privy
@@ -62,11 +63,19 @@ npm run start
 
 ## How to Play
 
-1. **Connect Wallet** - Login with your Monad-compatible wallet
-2. **Start Game** - Click "START GAME" to begin 60-second challenge
-3. **Aim & Shoot** - Drag the basketball to aim, release to shoot
-4. **Score Points** - Each successful basket earns 1 point
-5. **Submit Score** - Scores automatically submit to Monad Games ID
+1. **Register at Monad Games ID** - First, create account at [Monad Games ID](https://monad-games-id-site.vercel.app)
+2. **Connect Same Wallet** - Use the same wallet address in both platforms
+3. **Start Game** - Click "START GAME" to begin 60-second challenge
+4. **Aim & Shoot** - Drag the basketball to aim, release to shoot
+5. **Score Points** - Each successful basket earns 1 point
+6. **Submit Score** - Scores automatically submit to Monad Games ID
+
+### ⚠️ Important: Address Synchronization
+
+Your wallet address must match between the game and Monad Games ID. If addresses don't match:
+- Scores won't be saved properly
+- You'll see "Address not verified" status
+- Follow the [Address Sync Guide](./SETUP_ADDRESS_SYNC.md) to fix this
 
 ## Game Controls
 
@@ -143,6 +152,9 @@ npm run dev      # Start development server
 npm run build    # Build for production
 npm run start    # Start production server
 npm run lint     # Run ESLint
+
+# Testing address synchronization
+node scripts/test-address-sync.js user@example.com 0x1234...
 ```
 
 ## Contributing

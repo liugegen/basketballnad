@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { ethers } from 'ethers';
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,12 +13,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // In a real implementation, you would verify the signature here
-    // For now, we'll generate a simple session token
+    // Validate address format
+    if (!ethers.isAddress(playerAddress)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid address format' },
+        { status: 400 }
+      );
+    }
+
+    // Verify signature if not in development mode
+    if (signedMessage !== "development_mode") {
+      try {
+        const recoveredAddress = ethers.verifyMessage(message, signedMessage);
+        if (recoveredAddress.toLowerCase() !== playerAddress.toLowerCase()) {
+          return NextResponse.json(
+            { success: false, error: 'Invalid signature' },
+            { status: 401 }
+          );
+        }
+      } catch (signatureError) {
+        console.error('Signature verification failed:', signatureError);
+        return NextResponse.json(
+          { success: false, error: 'Invalid signature format' },
+          { status: 401 }
+        );
+      }
+    }
+
+    // Generate session token
     const sessionToken = crypto
       .createHash('sha256')
       .update(`${playerAddress}-${Date.now()}-${process.env.API_SECRET}`)
       .digest('hex');
+
+    console.log(`✅ Session token generated for address: ${playerAddress}`);
 
     return NextResponse.json({
       success: true,

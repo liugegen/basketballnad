@@ -62,7 +62,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         },
         defaultChain: monadTestnet,
         supportedChains: [monadTestnet],
-        loginMethods: ['email'],
+        loginMethods: ['email', 'wallet'],
       }}
     >
       <QueryClientProvider client={queryClient}>

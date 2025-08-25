@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:address": "node scripts/test-address-sync.js"
   },
   "dependencies": {
     "@privy-io/react-auth": "^2.21.4",
