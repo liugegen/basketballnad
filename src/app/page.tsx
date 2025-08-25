@@ -1,7 +1,6 @@
 'use client';
 
-import { usePrivy } from '@privy-io/react-auth';
-import LoginScreen from '@/components/LoginScreen';
+import AuthComponent from '@/components/AuthComponent';
 
 // Components
 import GameTitle from '@/components/GameTitle';
@@ -27,7 +26,7 @@ import { useTouchHandlers } from '@/hooks/useTouchHandlers';
 import { useState } from 'react';
 
 // Game Component - separated to avoid hooks rules issues
-function GameComponent() {
+function GameComponent({ playerAddress }: { playerAddress: string }) {
   // Notification state
   const [showNotification, setShowNotification] = useState(false);
   const [notificationScore, setNotificationScore] = useState(0);
@@ -107,6 +106,7 @@ function GameComponent() {
           <MonadGamesIntegration 
             score={score} 
             gameState={gameState}
+            playerAddress={playerAddress}
             onScoreSubmitted={(submittedScore) => {
               setNotificationScore(submittedScore);
               setShowNotification(true);
@@ -185,22 +185,20 @@ function GameComponent() {
 }
 
 export default function BasketNad() {
-  const { ready, authenticated } = usePrivy();
+  const [playerAddress, setPlayerAddress] = useState<string>("");
 
-  // Show loading while Privy is initializing
-  if (!ready) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
-      </div>
-    );
-  }
-
-  // Show login screen if not authenticated
-  if (!authenticated) {
-    return <LoginScreen />;
-  }
-
-  // Show game if authenticated
-  return <GameComponent />;
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col items-center justify-center gap-8">
+      {/* Auth Component at the top */}
+      <AuthComponent onAddressChange={setPlayerAddress} />
+      
+      {/* Game Component - only show if player has address */}
+      {playerAddress ? <GameComponent playerAddress={playerAddress} /> : (
+        <div className="text-white text-center">
+          <h2 className="text-2xl font-bold mb-4">Welcome to BasketNad!</h2>
+          <p className="text-gray-300">Please login with your Monad Games ID to start playing</p>
+        </div>
+      )}
+    </div>
+  );
 }

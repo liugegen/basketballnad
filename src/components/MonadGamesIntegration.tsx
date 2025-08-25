@@ -1,62 +1,100 @@
 'use client';
 
-import { usePrivy } from '@privy-io/react-auth';
 import { useEffect, useState } from 'react';
-import { useMonadGamesId } from '@/hooks/useMonadGamesId';
-import MonadSyncGuide from './MonadSyncGuide';
-import AddressMismatchGuide from './AddressMismatchGuide';
-import MonadGamesIdLogin from './MonadGamesIdLogin';
-import { MONAD_GAMES_ID_CONFIG } from '@/config/monad-games-id';
+import { useMonadGamesUser } from '@/hooks/useMonadGamesUser';
 
 export default function MonadGamesIntegration({
   score,
   gameState,
+  playerAddress,
   onScoreSubmitted
 }: {
   score: number;
   gameState: string;
+  playerAddress: string;
   onScoreSubmitted?: (score: number) => void;
 }) {
-  const { logout } = usePrivy();
-  const {
-    ready,
-    authenticated,
-    walletAddress,
-    isSubmitting,
-    lastSubmittedScore,
-    isAddressVerified,
-    verificationError,
-    submitScore,
-    verifyAddressWithMonad
-  } = useMonadGamesId();
-
   const [hasSubmittedThisGame, setHasSubmittedThisGame] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [lastSubmittedScore, setLastSubmittedScore] = useState<number | null>(null);
+  
+  const { 
+    user: monadUser, 
+    hasUsername, 
+    isLoading: isLoadingUser 
+  } = useMonadGamesUser(playerAddress);
 
   // Auto-submit score when game ends
   useEffect(() => {
-    if (gameState === 'gameOver' && score > 0 && authenticated && !hasSubmittedThisGame && !isSubmitting) {
-      submitScore(score).then((success) => {
-        if (success) {
-          setHasSubmittedThisGame(true);
-          onScoreSubmitted?.(score);
-        }
-      }).catch((error) => {
-        console.error('Error submitting score:', error);
-      });
+    if (gameState === 'gameOver' && score > 0 && playerAddress && !hasSubmittedThisGame && !isSubmitting) {
+      submitScore(score);
     }
 
     // Reset submission flag when new game starts
     if (gameState === 'playing') {
       setHasSubmittedThisGame(false);
     }
-  }, [gameState, score, authenticated, hasSubmittedThisGame, submitScore, isSubmitting, onScoreSubmitted]);
+  }, [gameState, score, playerAddress, hasSubmittedThisGame, isSubmitting]);
 
-  if (!ready) {
-    return (
-      <div className="flex items-center justify-center p-4">
-        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
-      </div>
-    );
+  const submitScore = async (scoreAmount: number) => {
+    if (!playerAddress || scoreAmount <= 0) return;
+
+    setIsSubmitting(true);
+    console.log('🎮 Submitting score to Monad Games ID...', { score: scoreAmount, playerAddress });
+
+    try {
+      // Get session token
+      const sessionTokenResponse = await fetch('/api/get-session-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          playerAddress,
+          message: `Authenticate for Monad Games ID score submission\nAddress: ${playerAddress}\nTimestamp: ${Date.now()}`,
+          signedMessage: "development_mode",
+        }),
+      });
+
+      const sessionData = await sessionTokenResponse.json();
+      if (!sessionData.success) {
+        console.error('Failed to get session token');
+        return;
+      }
+
+      // Submit score
+      const response = await fetch('/api/update-player-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          playerAddress,
+          scoreAmount,
+          transactionAmount: 1,
+          sessionToken: sessionData.sessionToken,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setLastSubmittedScore(scoreAmount);
+        setHasSubmittedThisGame(true);
+        onScoreSubmitted?.(scoreAmount);
+        console.log('✅ Score submitted successfully to Monad Games ID:', result);
+        
+        if (result.transactionHash) {
+          console.log(`Transaction confirmed: https://testnet.monadexplorer.com/tx/${result.transactionHash}`);
+        }
+      } else {
+        console.error('❌ Failed to submit score to Monad Games ID:', result.error);
+      }
+    } catch (error) {
+      console.error('Error submitting score to Monad Games ID:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (!playerAddress) {
+    return null;
   }
 
   return (
@@ -69,96 +107,60 @@ export default function MonadGamesIntegration({
         </div>
       </div>
 
-      {!authenticated ? (
-        <MonadGamesIdLogin />
-      ) : (
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-300">Player:</span>
-            <span className="text-sm text-orange-400 font-mono">
-              {walletAddress ?
-                `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` :
-                'Connected'
-              }
-            </span>
-          </div>
-
-          {/* Address Verification Status */}
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-300">Monad ID:</span>
-            <div className="flex items-center space-x-2">
-              {isAddressVerified ? (
-                <>
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-xs text-green-400">Verified</span>
-                </>
-              ) : (
-                <>
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
-                  <span className="text-xs text-yellow-400">Checking...</span>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Show verification error if any */}
-          {verificationError && !isAddressVerified && (
-            <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
-              <div className="flex items-center space-x-2 mb-2">
-                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                <span className="text-xs font-semibold text-red-400">Address Tidak Sinkron</span>
-              </div>
-              <p className="text-xs text-red-300 mb-2">
-                Wallet address Anda berbeda dengan yang terdaftar di Monad Games ID
-              </p>
-              <div className="text-xs text-gray-300 space-y-1 mb-2">
-                <div>Game: {walletAddress?.slice(0, 10)}...{walletAddress?.slice(-6)}</div>
-                <div>Monad ID: {MONAD_GAMES_ID_CONFIG.TEST_ADDRESSES.MONAD_GAMES_ID_USER.slice(0, 10)}...{MONAD_GAMES_ID_CONFIG.TEST_ADDRESSES.MONAD_GAMES_ID_USER.slice(-6)}</div>
-              </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={verifyAddressWithMonad}
-                  className="text-xs text-red-300 hover:text-red-200 underline"
-                >
-                  Coba Lagi
-                </button>
-              </div>
-              <AddressMismatchGuide 
-                gameAddress={walletAddress || ''} 
-                monadAddress={MONAD_GAMES_ID_CONFIG.TEST_ADDRESSES.MONAD_GAMES_ID_USER} 
-              />
-            </div>
-          )}
-
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-300">Current Score:</span>
-            <span className="text-lg font-bold text-white">{score}</span>
-          </div>
-
-          {lastSubmittedScore && lastSubmittedScore > 0 && (
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-300">Best Score:</span>
-              <span className="text-sm text-green-400 font-bold">{lastSubmittedScore}</span>
-            </div>
-          )}
-
-          {isSubmitting && (
-            <div className="flex items-center justify-center space-x-2 text-orange-400">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-400"></div>
-              <span className="text-sm">Submitting to Monad Games ID...</span>
-            </div>
-          )}
-
-          <button
-            onClick={logout}
-            className="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 text-sm"
-          >
-            Disconnect
-          </button>
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-300">Player:</span>
+          <span className="text-sm text-orange-400 font-mono">
+            {`${playerAddress.slice(0, 6)}...${playerAddress.slice(-4)}`}
+          </span>
         </div>
-      )}
 
-      <div className="mt-3 pt-3 border-t border-gray-600 space-y-2">
+        {/* Monad Games ID Status */}
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-300">Monad ID:</span>
+          <div className="flex items-center space-x-2">
+            {hasUsername && monadUser ? (
+              <>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-xs text-green-400">{monadUser.username}</span>
+              </>
+            ) : (
+              <>
+                <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                <a 
+                  href="https://monad-games-id-site.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-yellow-400 hover:text-yellow-300 underline"
+                >
+                  Register Username
+                </a>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-300">Current Score:</span>
+          <span className="text-lg font-bold text-white">{score}</span>
+        </div>
+
+        {lastSubmittedScore && lastSubmittedScore > 0 && (
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-gray-300">Best Score:</span>
+            <span className="text-sm text-green-400 font-bold">{lastSubmittedScore}</span>
+          </div>
+        )}
+
+        {isSubmitting && (
+          <div className="flex items-center justify-center space-x-2 text-orange-400">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-400"></div>
+            <span className="text-sm">Submitting to Monad Games ID...</span>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-3 pt-3 border-t border-gray-600">
         <a
           href="https://monad-games-id-site.vercel.app"
           target="_blank"
@@ -167,10 +169,6 @@ export default function MonadGamesIntegration({
         >
           View on Monad Games ID →
         </a>
-        
-        <div className="text-center">
-          <MonadSyncGuide />
-        </div>
       </div>
     </div>
   );
