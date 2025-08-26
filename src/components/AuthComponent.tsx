@@ -5,6 +5,7 @@ import {
   CrossAppAccountWithMetadata,
 } from "@privy-io/react-auth";
 import { useMonadGamesUser } from "@/hooks/useMonadGamesUser";
+import { useMonadGamesScore } from "@/hooks/useMonadGamesScore";
 
 // Separate component for when Privy is not configured
 function AuthNotConfigured() {
@@ -26,6 +27,13 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
     user: monadUser,
     hasUsername
   } = useMonadGamesUser(accountAddress);
+
+  const {
+    totalScore,
+    gamesPlayed,
+    isLoading: scoreLoading,
+    refreshScore
+  } = useMonadGamesScore(accountAddress);
 
   useEffect(() => {
     // Check if privy is ready and user is authenticated
@@ -88,30 +96,38 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
   }
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+    <div className="flex flex-col lg:flex-row items-center justify-between gap-4 w-full">
       {accountAddress ? (
         <>
-          {/* User Info */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-sm">
+          {/* User Profile Card */}
+          <div className="flex items-center gap-4 bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
+            {/* Avatar */}
+            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-lg">
                 {hasUsername && monadUser ? monadUser.username.charAt(0).toUpperCase() : '👤'}
               </span>
             </div>
             
+            {/* User Info */}
             <div className="flex flex-col">
               {hasUsername && monadUser ? (
-                <span className="text-white font-semibold text-sm">
-                  {monadUser.username}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-white font-semibold text-base">
+                    {monadUser.username}
+                  </span>
+                  <span className="text-green-400 text-xs bg-green-400/20 px-2 py-0.5 rounded-full">
+                    Verified
+                  </span>
+                </div>
               ) : (
                 <a
                   href="https://monad-games-id-site.vercel.app"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-yellow-400 hover:text-yellow-300 text-sm font-medium underline"
+                  className="text-yellow-400 hover:text-yellow-300 text-sm font-medium underline flex items-center gap-1"
                 >
-                  Register Username
+                  <span>Register Username</span>
+                  <span className="text-xs">↗</span>
                 </a>
               )}
               <span className="text-gray-400 text-xs font-mono">
@@ -120,14 +136,64 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
             </div>
           </div>
 
+          {/* Total Score Display */}
+          <div className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-sm rounded-xl p-3 border border-purple-500/20">
+            <div className="flex items-center gap-3">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white">
+                  {scoreLoading ? (
+                    <div className="animate-spin w-6 h-6 border-2 border-purple-400 border-t-transparent rounded-full mx-auto"></div>
+                  ) : (
+                    totalScore.toLocaleString()
+                  )}
+                </div>
+                <div className="text-xs text-purple-300">Total Score</div>
+              </div>
+              
+              <div className="w-px h-8 bg-white/20"></div>
+              
+              <div className="text-center">
+                <div className="text-lg font-semibold text-white">
+                  {scoreLoading ? '...' : gamesPlayed}
+                </div>
+                <div className="text-xs text-blue-300">Games</div>
+              </div>
+              
+              <div className="w-px h-8 bg-white/20"></div>
+              
+              {/* Refresh Button */}
+              <button
+                onClick={refreshScore}
+                disabled={scoreLoading}
+                className="bg-green-500/20 hover:bg-green-500/30 text-green-400 p-2 rounded-lg transition-colors border border-green-500/30 disabled:opacity-50"
+                title="Refresh Score"
+              >
+                <span className={`text-sm ${scoreLoading ? 'animate-spin' : ''}`}>
+                  🔄
+                </span>
+              </button>
+            </div>
+            
+            {/* Sync Status */}
+            <div className="mt-2 pt-2 border-t border-white/10">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-xs text-green-400">
+                  Synced with Monad Games ID
+                </span>
+              </div>
+            </div>
+          </div>
+
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
             <button
               onClick={copyToClipboard}
-              className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 px-3 py-2 rounded-lg text-xs transition-colors border border-blue-500/30"
+              className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 px-3 py-2 rounded-lg text-xs transition-colors border border-blue-500/30 flex items-center gap-1"
               title={accountAddress}
             >
-              {copied ? '✓ Copied' : '📋 Copy'}
+              <span>{copied ? '✓' : '📋'}</span>
+              <span className="hidden sm:inline">{copied ? 'Copied' : 'Copy'}</span>
             </button>
             
             <button

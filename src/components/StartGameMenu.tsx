@@ -60,14 +60,14 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
 
             <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
               <div className="text-3xl mb-2">⏱️</div>
-              <div className="font-semibold mb-1">60 seconds</div>
-              <p className="text-sm text-gray-300">play time</p>
+              <div className="font-semibold mb-1">60 Seconds</div>
+              <p className="text-sm text-gray-300">Game duration</p>
             </div>
 
             <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
               <div className="text-3xl mb-2">🏆</div>
-              <div className="font-semibold mb-1">high score</div>
-              <p className="text-sm text-gray-300">Enter as much as possible</p>
+              <div className="font-semibold mb-1">High Score</div>
+              <p className="text-sm text-gray-300">Score as many as possible</p>
             </div>
           </div>
         </div>

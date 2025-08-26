@@ -6,11 +6,11 @@ interface GameOverModalProps {
 
 export default function GameOverModal({ score, onPlayAgain, onMainMenu }: GameOverModalProps) {
   const getPerformanceMessage = (score: number) => {
-    if (score >= 20) return "🔥 Luar biasa! Kamu legenda basket!";
-    if (score >= 15) return "🎯 Kerja bagus! Skill menembak yang excellent!";
-    if (score >= 10) return "👏 Bagus! Terus berlatih!";
-    if (score >= 5) return "💪 Lumayan! Kamu mulai menguasainya!";
-    return "🏀 Terus coba! Latihan membuat sempurna!";
+    if (score >= 20) return "🔥 Amazing! You're a basketball legend!";
+    if (score >= 15) return "🎯 Great job! Excellent shooting skills!";
+    if (score >= 10) return "👏 Good! Keep practicing!";
+    if (score >= 5) return "💪 Not bad! You're getting the hang of it!";
+    return "🏀 Keep trying! Practice makes perfect!";
   };
 
   return (
@@ -31,7 +31,7 @@ export default function GameOverModal({ score, onPlayAgain, onMainMenu }: GameOv
         
         {/* Score display */}
         <div className="mb-6 md:mb-8">
-          <p className="text-lg md:text-2xl text-white/70 mb-2 md:mb-4 font-medium">Skor Akhir</p>
+          <p className="text-lg md:text-2xl text-white/70 mb-2 md:mb-4 font-medium">Final Score</p>
           <div className="relative">
             <p className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 mb-2 animate-pulse-gentle">
               {score}
