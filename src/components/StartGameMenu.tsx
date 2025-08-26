@@ -42,32 +42,32 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
             <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mr-3 shadow-lg">
               <span className="text-2xl">🎮</span>
             </div>
-            <h3 className="text-2xl font-bold text-white">Cara Bermain</h3>
+            <h3 className="text-2xl font-bold text-white">How to Play</h3>
           </div>
 
           <div className="grid grid-cols-2 gap-4 text-white/90">
             <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
               <div className="text-3xl mb-2">🏀</div>
-              <div className="font-semibold mb-1">Tekan & Arahkan</div>
-              <p className="text-sm text-gray-300">Drag bola ke arah ring</p>
+              <div className="font-semibold mb-1">Press & Point</div>
+              <p className="text-sm text-gray-300">Drag the ball towards the ring</p>
             </div>
 
             <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
               <div className="text-3xl mb-2">🎯</div>
-              <div className="font-semibold mb-1">Lepas & Tembak</div>
-              <p className="text-sm text-gray-300">Lepas untuk menembak</p>
+              <div className="font-semibold mb-1">Release & Shoot</div>
+              <p className="text-sm text-gray-300">Release to shoot</p>
             </div>
 
             <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
               <div className="text-3xl mb-2">⏱️</div>
-              <div className="font-semibold mb-1">60 Detik</div>
-              <p className="text-sm text-gray-300">Waktu bermain</p>
+              <div className="font-semibold mb-1">60 seconds</div>
+              <p className="text-sm text-gray-300">play time</p>
             </div>
 
             <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
               <div className="text-3xl mb-2">🏆</div>
-              <div className="font-semibold mb-1">Skor Tinggi</div>
-              <p className="text-sm text-gray-300">Masukkan sebanyak mungkin</p>
+              <div className="font-semibold mb-1">high score</div>
+              <p className="text-sm text-gray-300">Enter as much as possible</p>
             </div>
           </div>
         </div>
