@@ -164,7 +164,17 @@ export function useGameLogic() {
     };
 
     animationRef.current = requestAnimationFrame(animate);
-  }, [ballPosition, isThrowing, gameState, checkCollision]);
+  }, [
+    ballPosition, 
+    isThrowing, 
+    gameState, 
+    checkCollision, 
+    hoopConfig.HOOP_POSITION.x, 
+    hoopConfig.HOOP_POSITION.y, 
+    hoopConfig.HOOP_SIZE.height, 
+    hoopConfig.HOOP_SIZE.width, 
+    hoopConfig.INITIAL_BALL_POSITION
+  ]);
 
   // Game Flow Control
   const startGame = () => {

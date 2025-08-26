@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface UserScoreData {
   totalScore: number;
@@ -19,7 +19,7 @@ export function useMonadGamesScore(walletAddress: string): UseMonadGamesScoreRet
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchScoreData = async () => {
+  const fetchScoreData = useCallback(async () => {
     if (!walletAddress) {
       setTotalScore(0);
       setGamesPlayed(0);
@@ -51,7 +51,11 @@ export function useMonadGamesScore(walletAddress: string): UseMonadGamesScoreRet
           throw new Error(`HTTP error! status: ${leaderboardResponse.status}`);
         }
 
-        const leaderboardData: any[] = await leaderboardResponse.json();
+        const leaderboardData: Array<{
+          walletAddress: string;
+          totalScore: number;
+          gamesPlayed: number;
+        }> = await leaderboardResponse.json();
 
         // Find user's entry in leaderboard
         const userEntry = leaderboardData.find(
@@ -75,11 +79,11 @@ export function useMonadGamesScore(walletAddress: string): UseMonadGamesScoreRet
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [walletAddress]);
 
   useEffect(() => {
     fetchScoreData();
-  }, [walletAddress]);
+  }, [fetchScoreData]);
 
   const refreshScore = () => {
     fetchScoreData();

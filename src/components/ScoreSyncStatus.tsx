@@ -9,24 +9,22 @@ interface ScoreSyncStatusProps {
 
 export default function ScoreSyncStatus({ playerAddress, currentGameScore, gameState }: ScoreSyncStatusProps) {
   const { totalScore, refreshScore, isLoading } = useMonadGamesScore(playerAddress);
-  const [lastSyncedScore, setLastSyncedScore] = useState(0);
   const [showSyncIndicator, setShowSyncIndicator] = useState(false);
 
   useEffect(() => {
     if (gameState === 'gameOver' && currentGameScore > 0) {
       // Show sync indicator when game ends
       setShowSyncIndicator(true);
-      
+
       // Refresh score after a delay to allow for API sync
       const timer = setTimeout(() => {
         refreshScore();
-        setLastSyncedScore(totalScore);
         setShowSyncIndicator(false);
       }, 2000);
 
       return () => clearTimeout(timer);
     }
-  }, [gameState, currentGameScore, refreshScore, totalScore]);
+  }, [gameState, currentGameScore, refreshScore]);
 
   if (!playerAddress) return null;
 
@@ -42,13 +40,13 @@ export default function ScoreSyncStatus({ playerAddress, currentGameScore, gameS
             </div>
           )}
         </div>
-        
+
         <div className="space-y-1">
           <div className="flex justify-between items-center">
             <span className="text-xs text-gray-300">Current Game:</span>
             <span className="text-sm font-semibold text-white">{currentGameScore}</span>
           </div>
-          
+
           <div className="flex justify-between items-center">
             <span className="text-xs text-gray-300">Total Score:</span>
             <div className="flex items-center gap-2">
@@ -65,7 +63,7 @@ export default function ScoreSyncStatus({ playerAddress, currentGameScore, gameS
               </button>
             </div>
           </div>
-          
+
           {gameState === 'gameOver' && currentGameScore > 0 && (
             <div className="pt-2 border-t border-white/10">
               <div className="flex items-center gap-2">
