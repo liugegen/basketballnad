@@ -194,6 +194,18 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
         <StartGameMenu onStartGame={startGame} />
       )}
 
+      {/* Fallback Start Button - if menu doesn't show */}
+      {gameState === 'menu' && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <button
+            onClick={startGame}
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-200"
+          >
+            🏀 START GAME
+          </button>
+        </div>
+      )}
+
       {/* Game Over Modal */}
       {gameState === 'gameOver' && (
         <GameOverModal 

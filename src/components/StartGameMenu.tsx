@@ -16,8 +16,11 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
         {/* Main Start Button */}
         <div className="relative mb-8 md:mb-12">
           <button
-            onClick={onStartGame}
-            className="group relative bg-gradient-to-r from-purple-600 via-indigo-600 to-violet-600 hover:from-purple-700 hover:via-indigo-700 hover:to-violet-700 text-white font-black py-6 px-12 md:py-8 md:px-16 rounded-2xl md:rounded-3xl text-xl md:text-3xl shadow-[0_0_40px_rgba(147,51,234,0.4)] transform hover:scale-110 hover:shadow-[0_0_60px_rgba(147,51,234,0.6)] transition-all duration-500 border-2 md:border-4 border-purple-300/20 backdrop-blur-sm w-full max-w-md mx-auto"
+            onClick={() => {
+              console.log('Start Game button clicked!');
+              onStartGame();
+            }}
+            className="group relative bg-gradient-to-r from-purple-600 via-indigo-600 to-violet-600 hover:from-purple-700 hover:via-indigo-700 hover:to-violet-700 text-white font-black py-6 px-12 md:py-8 md:px-16 rounded-2xl md:rounded-3xl text-xl md:text-3xl shadow-[0_0_40px_rgba(147,51,234,0.4)] transform hover:scale-110 hover:shadow-[0_0_60px_rgba(147,51,234,0.6)] transition-all duration-500 border-2 md:border-4 border-purple-300/20 backdrop-blur-sm w-full max-w-md mx-auto cursor-pointer"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-2xl md:rounded-3xl"></div>
             <div className="relative flex items-center justify-center space-x-2 md:space-x-4">
@@ -34,6 +37,19 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
           <div className="hidden md:block absolute -top-4 -left-4 w-8 h-8 bg-purple-400/60 rounded-full animate-float"></div>
           <div className="hidden md:block absolute -bottom-4 -right-4 w-6 h-6 bg-indigo-400/60 rounded-full animate-float delay-1000"></div>
           <div className="hidden md:block absolute top-1/2 -right-8 w-4 h-4 bg-violet-400/60 rounded-full animate-float delay-500"></div>
+        </div>
+
+        {/* Alternative Simple Start Button */}
+        <div className="mb-6">
+          <button
+            onClick={() => {
+              console.log('Alternative Start Game button clicked!');
+              onStartGame();
+            }}
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 border-2 border-green-400/30"
+          >
+            🚀 MULAI PERMAINAN
+          </button>
         </div>
 
         {/* Instructions Panel - Responsive */}

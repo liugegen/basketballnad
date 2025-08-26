@@ -132,6 +132,7 @@ export function useGameLogic() {
 
   // Game Flow Control
   const startGame = () => {
+    console.log('Starting game...');
     setGameState('playing');
     setScore(0);
     setTimeLeft(60);
