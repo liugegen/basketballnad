@@ -8,7 +8,7 @@ interface ScoreSyncStatusProps {
 }
 
 export default function ScoreSyncStatus({ playerAddress, currentGameScore, gameState }: ScoreSyncStatusProps) {
-  const { isSubmitting, submitError, submitScore } = useBlockchainScoreSubmission();
+  const { submitError, submitScore } = useBlockchainScoreSubmission();
   const [syncStatus, setSyncStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   useEffect(() => {

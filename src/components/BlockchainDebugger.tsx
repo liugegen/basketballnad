@@ -1,7 +1,20 @@
 import { useState } from 'react';
 
+interface TestResult {
+  success: boolean;
+  error?: string;
+  config?: {
+    walletAddress: string;
+    balance: string;
+    contractAddress: string;
+    rpcUrl: string;
+    networkName: string;
+    chainId: string;
+  };
+}
+
 export default function BlockchainDebugger() {
-  const [testResult, setTestResult] = useState<any>(null);
+  const [testResult, setTestResult] = useState<TestResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const testBlockchainConnection = async () => {

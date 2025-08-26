@@ -92,7 +92,7 @@ export function useGameLogic(props?: UseGameLogicProps) {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [gameState, timeLeft]);
+  }, [gameState, timeLeft, props, score]);
 
   // Collision Detection & Scoring
   const checkCollision = useCallback((ballPos: BallPosition): boolean => {
