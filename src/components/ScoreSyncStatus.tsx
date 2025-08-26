@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useScoreSubmission } from '@/hooks/useScoreSubmission';
+import { useBlockchainScoreSubmission } from '@/hooks/useBlockchainScoreSubmission';
 
 interface ScoreSyncStatusProps {
   playerAddress: string;
@@ -8,7 +8,7 @@ interface ScoreSyncStatusProps {
 }
 
 export default function ScoreSyncStatus({ playerAddress, currentGameScore, gameState }: ScoreSyncStatusProps) {
-  const { isSubmitting, submitError, submitScore } = useScoreSubmission();
+  const { isSubmitting, submitError, submitScore } = useBlockchainScoreSubmission();
   const [syncStatus, setSyncStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   useEffect(() => {
@@ -37,14 +37,14 @@ export default function ScoreSyncStatus({ playerAddress, currentGameScore, gameS
       case 'submitting':
         return {
           icon: <div className="animate-spin w-4 h-4 border-2 border-yellow-400 border-t-transparent rounded-full"></div>,
-          text: 'Submitting score to Monad Games ID...',
+          text: 'Submitting score to blockchain...',
           textColor: 'text-yellow-400',
           bgColor: 'bg-yellow-500/20 border-yellow-500/30'
         };
       case 'success':
         return {
           icon: <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">✓</div>,
-          text: `Score ${currentGameScore} submitted successfully!`,
+          text: `Score ${currentGameScore} submitted to blockchain!`,
           textColor: 'text-green-400',
           bgColor: 'bg-green-500/20 border-green-500/30'
         };

@@ -18,6 +18,7 @@ import StartGameMenu from '@/components/StartGameMenu';
 import GameOverModal from '@/components/GameOverModal';
 import BackgroundEffects from '@/components/BackgroundEffects';
 import ScoreSyncStatus from '@/components/ScoreSyncStatus';
+import BlockchainDebugger from '@/components/BlockchainDebugger';
 
 // Hooks
 import { useGameLogic, BALL_SIZE } from '@/hooks/useGameLogic';
@@ -200,9 +201,14 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
         gameState={gameState}
       />
 
-      {/* Debug Component - Hidden on mobile */}
+      {/* Debug Components - Hidden on mobile */}
       <div className="hidden md:block">
         <ScoreDebugger playerAddress={playerAddress} />
+      </div>
+      
+      {/* Blockchain Debug Component */}
+      <div className="hidden md:block">
+        <BlockchainDebugger />
       </div>
     </div>
   );
