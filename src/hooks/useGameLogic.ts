@@ -4,20 +4,56 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 export type GameState = 'menu' | 'playing' | 'gameOver';
 export type BallPosition = { x: number; y: number };
 
-// Game constants
+// Game constants - Responsive values
 export const BALL_SIZE = 30; // Smaller ball for better proportion with larger hoop
-export const HOOP_POSITION = { x: 400, y: 50 }; // Adjusted position for MAXIMUM size hoop
-export const HOOP_SIZE = { width: 400, height: 80 }; // MAXIMUM size for very realistic proportion
+
+// Responsive hoop configuration
+export const getResponsiveHoopConfig = () => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  
+  if (isMobile) {
+    return {
+      HOOP_POSITION: { x: 150, y: 30 }, // Centered for mobile
+      HOOP_SIZE: { width: 200, height: 40 }, // Smaller for mobile
+      INITIAL_BALL_POSITION: { x: 40, y: 200 }
+    };
+  }
+  
+  return {
+    HOOP_POSITION: { x: 400, y: 50 }, // Desktop position
+    HOOP_SIZE: { width: 400, height: 80 }, // Desktop size
+    INITIAL_BALL_POSITION: { x: 80, y: 320 }
+  };
+};
+
+// Default values for server-side rendering
+export const HOOP_POSITION = { x: 400, y: 50 };
+export const HOOP_SIZE = { width: 400, height: 80 };
 export const INITIAL_BALL_POSITION = { x: 80, y: 320 };
 
 export function useGameLogic() {
+  // Get responsive configuration
+  const [hoopConfig, setHoopConfig] = useState(() => getResponsiveHoopConfig());
+  
   // Game State Management
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [gameState, setGameState] = useState<GameState>('menu');
 
   // Ball physics and interaction states
-  const [ballPosition, setBallPosition] = useState<BallPosition>(INITIAL_BALL_POSITION);
+  const [ballPosition, setBallPosition] = useState<BallPosition>(hoopConfig.INITIAL_BALL_POSITION);
+  
+  // Update hoop config on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setHoopConfig(getResponsiveHoopConfig());
+    };
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []);
   const [isThrowing, setIsThrowing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState<BallPosition>({ x: 0, y: 0 });
@@ -55,17 +91,17 @@ export function useGameLogic() {
     const ballCenterX = ballPos.x + BALL_SIZE / 2;
     const ballCenterY = ballPos.y + BALL_SIZE / 2;
 
-    // Hoop collision area - MAXIMUM forgiving with MAXIMUM size hoop
-    const hoopLeft = HOOP_POSITION.x + 40;
-    const hoopRight = HOOP_POSITION.x + HOOP_SIZE.width - 40;
-    const hoopTop = HOOP_POSITION.y + 30;
-    const hoopBottom = HOOP_POSITION.y + HOOP_SIZE.height + 50;
+    // Hoop collision area - responsive and forgiving
+    const hoopLeft = hoopConfig.HOOP_POSITION.x + (hoopConfig.HOOP_SIZE.width * 0.1);
+    const hoopRight = hoopConfig.HOOP_POSITION.x + hoopConfig.HOOP_SIZE.width - (hoopConfig.HOOP_SIZE.width * 0.1);
+    const hoopTop = hoopConfig.HOOP_POSITION.y + (hoopConfig.HOOP_SIZE.height * 0.4);
+    const hoopBottom = hoopConfig.HOOP_POSITION.y + hoopConfig.HOOP_SIZE.height + (hoopConfig.HOOP_SIZE.height * 0.6);
     
     return ballCenterX >= hoopLeft && 
            ballCenterX <= hoopRight && 
            ballCenterY >= hoopTop && 
            ballCenterY <= hoopBottom;
-  }, []);
+  }, [hoopConfig]);
 
   // Ball Throwing Mechanic with improved physics
   const handleThrow = useCallback(() => {
@@ -75,8 +111,8 @@ export function useGameLogic() {
     const startPos = { ...ballPosition };
     
     // Calculate direction towards hoop center
-    const hoopCenterX = HOOP_POSITION.x + HOOP_SIZE.width / 2;
-    const hoopCenterY = HOOP_POSITION.y + HOOP_SIZE.height / 2;
+    const hoopCenterX = hoopConfig.HOOP_POSITION.x + hoopConfig.HOOP_SIZE.width / 2;
+    const hoopCenterY = hoopConfig.HOOP_POSITION.y + hoopConfig.HOOP_SIZE.height / 2;
     
     const deltaX = hoopCenterX - startPos.x;
     const deltaY = hoopCenterY - startPos.y;
@@ -107,7 +143,7 @@ export function useGameLogic() {
         setShowScoreEffect(true);
         
         setTimeout(() => {
-          setBallPosition(INITIAL_BALL_POSITION);
+          setBallPosition(hoopConfig.INITIAL_BALL_POSITION);
           setIsThrowing(false);
           setShowScoreEffect(false);
           setTrajectory([]);
@@ -120,7 +156,7 @@ export function useGameLogic() {
       } else {
         // Animation complete, reset ball
         setTimeout(() => {
-          setBallPosition(INITIAL_BALL_POSITION);
+          setBallPosition(hoopConfig.INITIAL_BALL_POSITION);
           setIsThrowing(false);
           setTrajectory([]);
         }, 500);
@@ -136,7 +172,7 @@ export function useGameLogic() {
     setGameState('playing');
     setScore(0);
     setTimeLeft(60);
-    setBallPosition(INITIAL_BALL_POSITION);
+    setBallPosition(hoopConfig.INITIAL_BALL_POSITION);
     setIsThrowing(false);
     setIsDragging(false);
     setShowScoreEffect(false);
@@ -147,7 +183,7 @@ export function useGameLogic() {
     setGameState('menu');
     setScore(0);
     setTimeLeft(60);
-    setBallPosition(INITIAL_BALL_POSITION);
+    setBallPosition(hoopConfig.INITIAL_BALL_POSITION);
     setIsThrowing(false);
     setIsDragging(false);
     setShowScoreEffect(false);
@@ -167,6 +203,10 @@ export function useGameLogic() {
     isDragging,
     showScoreEffect,
     trajectory,
+    
+    // Responsive configuration
+    hoopPosition: hoopConfig.HOOP_POSITION,
+    hoopSize: hoopConfig.HOOP_SIZE,
     
     // Refs
     ballRef,

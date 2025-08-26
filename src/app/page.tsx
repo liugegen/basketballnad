@@ -31,7 +31,7 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
   // Notification state
   const [showNotification, setShowNotification] = useState(false);
   const [notificationScore, setNotificationScore] = useState(0);
-  
+
   // Game logic hook
   const {
     score,
@@ -42,6 +42,8 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
     isDragging,
     showScoreEffect,
     trajectory,
+    hoopPosition,
+    hoopSize,
     ballRef,
     gameAreaRef,
     startGame,
@@ -108,11 +110,11 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
           {gameState === 'playing' && (
             <GameHUD score={score} timeLeft={timeLeft} />
           )}
-          
+
           {/* Monad Games Integration */}
           <div className="ml-4">
-            <MonadGamesIntegration 
-              score={score} 
+            <MonadGamesIntegration
+              score={score}
               gameState={gameState}
               playerAddress={playerAddress}
               onScoreSubmitted={(submittedScore) => {
@@ -136,16 +138,16 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
             gameAreaRef={gameAreaRef}
           >
             {/* Basketball Hoop */}
-            <BasketballHoop 
-              position={HOOP_POSITION} 
-              size={HOOP_SIZE}
+            <BasketballHoop
+              position={hoopPosition}
+              size={hoopSize}
               useProfessionalImage={true}
             />
 
             {/* Ball Trajectory Trail */}
-            <TrajectoryTrail 
-              trajectory={trajectory} 
-              ballSize={BALL_SIZE} 
+            <TrajectoryTrail
+              trajectory={trajectory}
+              ballSize={BALL_SIZE}
             />
 
             {/* Basketball */}
@@ -158,13 +160,13 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
             />
 
             {/* Game Instructions */}
-            <GameInstructions 
-              isVisible={gameState === 'playing' && !isThrowing && !isDragging} 
+            <GameInstructions
+              isVisible={gameState === 'playing' && !isThrowing && !isDragging}
             />
 
             {/* Aiming Guide */}
             <AimingGuide isVisible={isDragging} />
-            
+
             {/* Score Effect */}
             <ScoreEffect isVisible={showScoreEffect} />
           </BasketballCourt>
@@ -172,8 +174,8 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
 
         {/* Mobile Monad Games Integration */}
         <div className="md:hidden mb-6">
-          <MonadGamesIntegration 
-            score={score} 
+          <MonadGamesIntegration
+            score={score}
             gameState={gameState}
             playerAddress={playerAddress}
             onScoreSubmitted={(submittedScore) => {
@@ -194,21 +196,23 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
         <StartGameMenu onStartGame={startGame} />
       )}
 
-      {/* Fallback Start Button - if menu doesn't show */}
+      {/* Fallback Start Button - centered for visibility */}
       {gameState === 'menu' && (
-        <div className="fixed bottom-4 right-4 z-50">
-          <button
-            onClick={startGame}
-            className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-200"
-          >
-            🏀 START GAME
-          </button>
+        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+          <div className="pointer-events-auto">
+            <button
+              onClick={startGame}
+              className="bg-green-600 hover:bg-green-700 text-white font-bold py-6 px-12 rounded-2xl text-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 border-4 border-green-400/30 animate-pulse"
+            >
+              🏀 START GAME 🎯
+            </button>
+          </div>
         </div>
       )}
 
       {/* Game Over Modal */}
       {gameState === 'gameOver' && (
-        <GameOverModal 
+        <GameOverModal
           score={score}
           onPlayAgain={startGame}
           onMainMenu={resetGame}
@@ -241,7 +245,7 @@ export default function BasketNad() {
           <AuthComponent onAddressChange={setPlayerAddress} />
         </div>
       </div>
-      
+
       {/* Main Content */}
       <div className="pt-20">
         {playerAddress ? (
@@ -260,7 +264,7 @@ export default function BasketNad() {
                   Play the best basketball game on Monad Network and achieve the highest score!
                 </p>
               </div>
-              
+
               <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
                 <h2 className="text-2xl font-bold text-white mb-4">Welcome!</h2>
                 <p className="text-gray-300 mb-6">

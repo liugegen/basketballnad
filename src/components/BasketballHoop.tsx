@@ -13,10 +13,10 @@ export default function BasketballHoop({ position, size, useProfessionalImage = 
       <div
         className="absolute z-10 transform hover:scale-105 transition-all duration-300"
         style={{
-          left: position.x,
-          top: position.y,
-          width: size.width,
-          height: size.height,
+          left: `${position.x}px`,
+          top: `${position.y}px`,
+          width: `${size.width}px`,
+          height: `${size.height}px`,
         }}
       >
         <Image 
@@ -53,10 +53,10 @@ export default function BasketballHoop({ position, size, useProfessionalImage = 
     <div
       className="absolute z-10 transform hover:scale-105 transition-all duration-300"
       style={{
-        left: position.x,
-        top: position.y,
-        width: size.width,
-        height: size.height,
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        width: `${size.width}px`,
+        height: `${size.height}px`,
       }}
     >
       {/* Professional Backboard */}

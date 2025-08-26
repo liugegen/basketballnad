@@ -40,7 +40,7 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
         </div>
 
         {/* Alternative Simple Start Button */}
-        <div className="mb-6">
+        <div className="mb-6 flex flex-col items-center gap-4">
           <button
             onClick={() => {
               console.log('Alternative Start Game button clicked!');
@@ -49,6 +49,17 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
             className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 border-2 border-green-400/30"
           >
             🚀 MULAI PERMAINAN
+          </button>
+          
+          {/* Emergency Start Button - Always visible */}
+          <button
+            onClick={() => {
+              console.log('Emergency Start Game button clicked!');
+              onStartGame();
+            }}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg text-base shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 border border-red-400/30"
+          >
+            ⚡ START NOW
           </button>
         </div>
 
