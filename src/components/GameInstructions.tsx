@@ -11,28 +11,28 @@ export default function GameInstructions({ isVisible }: GameInstructionsProps) {
         <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg md:rounded-xl flex items-center justify-center mr-2 md:mr-3 shadow-lg">
           <span className="text-lg md:text-xl">🎯</span>
         </div>
-        <div className="font-bold text-lg md:text-xl text-yellow-400">Cara Main</div>
+        <div className="font-bold text-lg md:text-xl text-yellow-400">How to Play</div>
       </div>
       <div className="space-y-2 md:space-y-3 text-xs md:text-sm text-white/90">
         <div className="flex items-center space-x-2 md:space-x-3">
           <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-orange-400 rounded-full flex-shrink-0"></div>
           <span className="hidden md:inline">Click and hold the basketball</span>
-          <span className="md:hidden">Tekan dan tahan bola</span>
+          <span className="md:hidden">Press and hold the ball</span>
         </div>
         <div className="flex items-center space-x-2 md:space-x-3">
           <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-orange-400 rounded-full flex-shrink-0"></div>
           <span className="hidden md:inline">Drag to aim at the glowing hoop</span>
-          <span className="md:hidden">Geser untuk bidik ring</span>
+          <span className="md:hidden">Swipe to aim at the ring</span>
         </div>
         <div className="flex items-center space-x-2 md:space-x-3">
           <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-orange-400 rounded-full flex-shrink-0"></div>
           <span className="hidden md:inline">Release to shoot!</span>
-          <span className="md:hidden">Lepas untuk tembak!</span>
+          <span className="md:hidden">Off to shoot!</span>
         </div>
         <div className="flex items-center space-x-2 md:space-x-3">
           <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-orange-400 rounded-full flex-shrink-0"></div>
           <span className="hidden md:inline">Score as many as possible!</span>
-          <span className="md:hidden">Raih skor tertinggi!</span>
+          <span className="md:hidden">Get the highest score!</span>
         </div>
       </div>
     </div>

@@ -17,20 +17,15 @@ import TrajectoryTrail from '@/components/TrajectoryTrail';
 import StartGameMenu from '@/components/StartGameMenu';
 import GameOverModal from '@/components/GameOverModal';
 import BackgroundEffects from '@/components/BackgroundEffects';
-import MonadGamesIntegration from '@/components/MonadGamesIntegration';
-import ScoreSubmissionNotification from '@/components/ScoreSubmissionNotification';
 
 // Hooks
-import { useGameLogic, BALL_SIZE, HOOP_POSITION, HOOP_SIZE } from '@/hooks/useGameLogic';
+import { useGameLogic, BALL_SIZE } from '@/hooks/useGameLogic';
 import { useMouseHandlers } from '@/hooks/useMouseHandlers';
 import { useTouchHandlers } from '@/hooks/useTouchHandlers';
 import { useState } from 'react';
 
 // Game Component - separated to avoid hooks rules issues
 function GameComponent({ playerAddress }: { playerAddress: string }) {
-  // Notification state
-  const [showNotification, setShowNotification] = useState(false);
-  const [notificationScore, setNotificationScore] = useState(0);
 
   // Game logic hook
   const {
@@ -106,23 +101,10 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
         </div>
 
         {/* Game Stats - Desktop Only */}
-        <div className="hidden md:flex justify-between items-start w-full max-w-6xl mx-auto mb-8 relative z-10">
+        <div className="hidden md:flex justify-center items-start w-full max-w-6xl mx-auto mb-8 relative z-10">
           {gameState === 'playing' && (
             <GameHUD score={score} timeLeft={timeLeft} />
           )}
-
-          {/* Monad Games Integration */}
-          <div className="ml-4">
-            <MonadGamesIntegration
-              score={score}
-              gameState={gameState}
-              playerAddress={playerAddress}
-              onScoreSubmitted={(submittedScore) => {
-                setNotificationScore(submittedScore);
-                setShowNotification(true);
-              }}
-            />
-          </div>
         </div>
 
         {/* Main Game Court - Responsive */}
@@ -172,18 +154,7 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
           </BasketballCourt>
         </div>
 
-        {/* Mobile Monad Games Integration */}
-        <div className="md:hidden mb-6">
-          <MonadGamesIntegration
-            score={score}
-            gameState={gameState}
-            playerAddress={playerAddress}
-            onScoreSubmitted={(submittedScore) => {
-              setNotificationScore(submittedScore);
-              setShowNotification(true);
-            }}
-          />
-        </div>
+
       </div>
 
       {/* Debug: Show current game state */}
@@ -219,12 +190,7 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
         />
       )}
 
-      {/* Score Submission Notification */}
-      <ScoreSubmissionNotification
-        show={showNotification}
-        score={notificationScore}
-        onClose={() => setShowNotification(false)}
-      />
+
 
       {/* Debug Component - Hidden on mobile */}
       <div className="hidden md:block">

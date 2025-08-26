@@ -26,7 +26,7 @@ export default function GameTitle({ className = "" }: GameTitleProps) {
       </div>
       <div className="flex items-center justify-center space-x-2 text-white/70">
         <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce"></div>
-        <p className="text-xl font-medium tracking-wider">Mission 7 Monad Game Jam</p>
+        <p className="text-xl font-medium tracking-wider">BasketBallNad</p>
         <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce delay-300"></div>
       </div>
     </div>
