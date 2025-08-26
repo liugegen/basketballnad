@@ -31,7 +31,11 @@ export const HOOP_POSITION = { x: 400, y: 50 };
 export const HOOP_SIZE = { width: 400, height: 80 };
 export const INITIAL_BALL_POSITION = { x: 80, y: 320 };
 
-export function useGameLogic() {
+interface UseGameLogicProps {
+  onGameEnd?: (finalScore: number) => void;
+}
+
+export function useGameLogic(props?: UseGameLogicProps) {
   // Get responsive configuration
   const [hoopConfig, setHoopConfig] = useState(() => getResponsiveHoopConfig());
   
@@ -74,6 +78,10 @@ export function useGameLogic() {
         setTimeLeft((prev) => {
           if (prev <= 1) {
             setGameState('gameOver');
+            // Call onGameEnd callback with final score
+            if (props?.onGameEnd) {
+              props.onGameEnd(score);
+            }
             return 0;
           }
           return prev - 1;
