@@ -175,7 +175,10 @@ function GameComponent({ playerAddress }: { playerAddress: string }) {
           <div className="pointer-events-auto">
             <button
               onClick={startGame}
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-6 px-12 rounded-2xl text-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 border-4 border-green-400/30 animate-pulse"
+              className="text-white font-bold py-6 px-12 rounded-2xl text-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 border-4 border-purple-400/30 animate-pulse"
+              style={{
+                background: 'linear-gradient(135deg, #9333ea 0%, #7c3aed 50%, #6366f1 100%)'
+              }}
             >
               🏀 START GAME 🎯
             </button>

@@ -37,37 +37,47 @@ export default function StartGameMenu({ onStartGame }: StartGameMenuProps) {
 
 
         {/* Simple Instructions */}
-        <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/60 backdrop-blur-xl rounded-2xl p-6 border border-gray-500/20 shadow-2xl">
+        <div className="backdrop-blur-xl rounded-2xl p-6 border border-purple-500/30 shadow-2xl" style={{
+          background: 'linear-gradient(135deg, rgba(30, 27, 75, 0.8) 0%, rgba(49, 46, 129, 0.6) 100%)'
+        }}>
           <div className="flex items-center justify-center mb-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mr-3 shadow-lg">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center mr-3 shadow-lg">
               <span className="text-2xl">🎮</span>
             </div>
             <h3 className="text-2xl font-bold text-white">How to Play</h3>
           </div>
 
           <div className="grid grid-cols-2 gap-4 text-white/90">
-            <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+            <div className="text-center p-4 rounded-xl border border-purple-400/20" style={{
+              background: 'rgba(147, 51, 234, 0.1)'
+            }}>
               <div className="text-3xl mb-2">🏀</div>
-              <div className="font-semibold mb-1">Press & Point</div>
-              <p className="text-sm text-gray-300">Drag the ball towards the ring</p>
+              <div className="font-semibold mb-1 text-white">Press & Point</div>
+              <p className="text-sm text-purple-200/80">Drag the ball towards the ring</p>
             </div>
 
-            <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+            <div className="text-center p-4 rounded-xl border border-purple-400/20" style={{
+              background: 'rgba(147, 51, 234, 0.1)'
+            }}>
               <div className="text-3xl mb-2">🎯</div>
-              <div className="font-semibold mb-1">Release & Shoot</div>
-              <p className="text-sm text-gray-300">Release to shoot</p>
+              <div className="font-semibold mb-1 text-white">Release & Shoot</div>
+              <p className="text-sm text-purple-200/80">Release to shoot</p>
             </div>
 
-            <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+            <div className="text-center p-4 rounded-xl border border-purple-400/20" style={{
+              background: 'rgba(147, 51, 234, 0.1)'
+            }}>
               <div className="text-3xl mb-2">⏱️</div>
-              <div className="font-semibold mb-1">60 Seconds</div>
-              <p className="text-sm text-gray-300">Game duration</p>
+              <div className="font-semibold mb-1 text-white">60 Seconds</div>
+              <p className="text-sm text-purple-200/80">Game duration</p>
             </div>
 
-            <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+            <div className="text-center p-4 rounded-xl border border-purple-400/20" style={{
+              background: 'rgba(147, 51, 234, 0.1)'
+            }}>
               <div className="text-3xl mb-2">🏆</div>
-              <div className="font-semibold mb-1">High Score</div>
-              <p className="text-sm text-gray-300">Score as many as possible</p>
+              <div className="font-semibold mb-1 text-white">High Score</div>
+              <p className="text-sm text-purple-200/80">Score as many as possible</p>
             </div>
           </div>
         </div>
