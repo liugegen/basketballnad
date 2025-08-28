@@ -426,7 +426,7 @@ export default function BasketNad() {
                             Global Competition
                           </h3>
                           <p className="text-sm leading-relaxed" style={{ color: 'rgba(203, 213, 225, 0.8)' }}>
-                            Compete with players worldwide on our real-time leaderboard. Climb the ranks and prove you're the ultimate basketball champion.
+                            Compete with players worldwide on our real-time leaderboard. Climb the ranks and prove you&apos;re the ultimate basketball champion.
                           </p>
                         </div>
                       </div>
@@ -482,7 +482,7 @@ export default function BasketNad() {
                       🚀 Ready to dominate the court?
                     </p>
                     <p className="text-base mb-8" style={{ color: 'rgba(203, 213, 225, 0.7)' }}>
-                      Click the "Login with Monad Games ID" button above to connect your wallet and start your basketball journey!
+                      Click the &quot;Login with Monad Games ID&quot; button above to connect your wallet and start your basketball journey!
                     </p>
 
                     {/* Footer */}
