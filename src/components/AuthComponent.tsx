@@ -80,11 +80,49 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
       <div className="flex justify-center">
         <button
           onClick={login}
-          className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3"
+          className="relative overflow-hidden group transition-all duration-300 transform hover:scale-105"
+          style={{
+            background: 'linear-gradient(135deg, #9333ea 0%, #7c3aed 50%, #6366f1 100%)',
+            padding: '16px 32px',
+            borderRadius: '16px',
+            border: '1px solid rgba(147, 51, 234, 0.3)',
+            boxShadow: '0 10px 30px rgba(147, 51, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+          }}
         >
-          <span className="text-xl">🎮</span>
-          <span className="hidden sm:inline">Login with Monad Games ID</span>
-          <span className="sm:hidden">Login</span>
+          {/* Enhanced glow effect */}
+          <div 
+            className="absolute inset-0 rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-300"
+            style={{
+              background: 'linear-gradient(135deg, #9333ea 0%, #6366f1 100%)'
+            }}
+          ></div>
+          
+          {/* Shimmer effect */}
+          <div 
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"
+            style={{ borderRadius: '16px' }}
+          ></div>
+          
+          <div className="relative flex items-center gap-4 text-white">
+            <div 
+              className="w-10 h-10 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:rotate-12"
+              style={{
+                background: 'rgba(255, 255, 255, 0.15)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <span className="text-xl">🎮</span>
+            </div>
+            <div className="flex flex-col items-start">
+              <span className="hidden sm:inline text-lg font-bold tracking-wide">
+                Login with Monad Games ID
+              </span>
+              <span className="sm:hidden text-lg font-bold">Login</span>
+              <span className="hidden sm:inline text-sm opacity-80 font-medium">
+                Connect your wallet to start playing
+              </span>
+            </div>
+          </div>
         </button>
       </div>
     );
@@ -94,24 +132,51 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
     <div className="flex flex-col lg:flex-row items-center justify-between gap-4 w-full">
       {accountAddress ? (
         <>
-          {/* User Profile Card */}
-          <div className="flex items-center gap-4 bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
-            {/* Avatar */}
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-lg">
+          {/* Professional User Profile Card */}
+          <div 
+            className="flex items-center gap-4 rounded-xl p-4 transition-all duration-300 hover:scale-105"
+            style={{
+              background: 'rgba(255, 255, 255, 0.08)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(147, 51, 234, 0.25)',
+              boxShadow: '0 8px 25px rgba(147, 51, 234, 0.15)'
+            }}
+          >
+            {/* Enhanced Avatar */}
+            <div 
+              className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg relative overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, #9333ea 0%, #6366f1 100%)',
+                boxShadow: '0 4px 15px rgba(147, 51, 234, 0.4)'
+              }}
+            >
+              <div 
+                className="absolute inset-0 rounded-full blur-sm opacity-40 animate-pulse"
+                style={{
+                  background: 'linear-gradient(135deg, #9333ea 0%, #6366f1 100%)'
+                }}
+              ></div>
+              <span className="text-white font-bold text-xl relative z-10">
                 {hasUsername && monadUser ? monadUser.username.charAt(0).toUpperCase() : '👤'}
               </span>
             </div>
 
-            {/* User Info */}
+            {/* Enhanced User Info */}
             <div className="flex flex-col">
               {hasUsername && monadUser ? (
-                <div className="flex items-center gap-2">
-                  <span className="text-white font-semibold text-base">
+                <div className="flex items-center gap-3">
+                  <span className="text-white font-bold text-lg">
                     {monadUser.username}
                   </span>
-                  <span className="text-green-400 text-xs bg-green-400/20 px-2 py-0.5 rounded-full">
-                    Verified
+                  <span 
+                    className="text-xs font-semibold px-3 py-1 rounded-full"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%)',
+                      color: '#22c55e',
+                      border: '1px solid rgba(34, 197, 94, 0.3)'
+                    }}
+                  >
+                    ✓ Verified
                   </span>
                 </div>
               ) : (
@@ -119,13 +184,16 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
                   href="https://monad-games-id-site.vercel.app"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-yellow-400 hover:text-yellow-300 text-sm font-medium underline flex items-center gap-1"
+                  className="text-purple-300 hover:text-white text-sm font-semibold underline flex items-center gap-2 transition-colors duration-200"
                 >
                   <span>Register Username</span>
                   <span className="text-xs">↗</span>
                 </a>
               )}
-              <span className="text-gray-400 text-xs font-mono">
+              <span 
+                className="text-xs font-mono mt-1"
+                style={{ color: 'rgba(203, 213, 225, 0.7)' }}
+              >
                 {formatAddress(accountAddress)}
               </span>
             </div>
@@ -133,20 +201,32 @@ function PrivyAuth({ onAddressChange }: { onAddressChange: (address: string) => 
 
 
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2">
+          {/* Professional Action Buttons */}
+          <div className="flex items-center gap-3">
             <button
               onClick={copyToClipboard}
-              className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 px-3 py-2 rounded-lg text-xs transition-colors border border-blue-500/30 flex items-center gap-1"
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 hover:scale-105"
+              style={{
+                background: 'rgba(147, 51, 234, 0.15)',
+                color: '#c4b5fd',
+                border: '1px solid rgba(147, 51, 234, 0.3)',
+                boxShadow: '0 2px 8px rgba(147, 51, 234, 0.1)'
+              }}
               title={accountAddress}
             >
-              <span>{copied ? '✓' : '📋'}</span>
+              <span className="text-base">{copied ? '✓' : '📋'}</span>
               <span className="hidden sm:inline">{copied ? 'Copied' : 'Copy'}</span>
             </button>
 
             <button
               onClick={logout}
-              className="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-2 rounded-lg text-xs transition-colors border border-red-500/30"
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105"
+              style={{
+                background: 'rgba(239, 68, 68, 0.15)',
+                color: '#fca5a5',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                boxShadow: '0 2px 8px rgba(239, 68, 68, 0.1)'
+              }}
             >
               Logout
             </button>
